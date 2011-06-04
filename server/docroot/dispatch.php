@@ -3,6 +3,9 @@
 // load Tonic library (DO NOT MODIFY)
 require_once '../lib/tonic.php';
 
+// load common files
+require_once '../common/constants.php';
+
 // load API resources
 require_once '../resources/user.php';
 require_once '../resources/game.php';
