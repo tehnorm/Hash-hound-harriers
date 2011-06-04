@@ -62,10 +62,42 @@ class GameResource extends Resource {
 	function create_game($request) {
 		$response = new Response($request);
 
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "";
+    
 		try {
 			$response->code = Response::OK;
 			$response->addHeader("Content-Type", "text/plain");
 			$response->body = "Creating a new Game";
+
+      $data = file_get_contents("php://input");
+      if ($data) {
+        try {
+          $params = json_decode($data);
+					
+          if (!isset($params->{"name"})) throw new Exception("Missing name");     
+          $game_data = array("name" => $params->{"name"});
+          
+          $mongo = new Mongo(DB_SERVER);
+          $db = $mongo->hhh;
+          $id = new MongoID();
+          $game_collection = $db->games;
+          $game_collection->insert($game_data, true);
+          $game_data = $game_data["_id"];
+
+					$response->code = Response::OK;
+					$response->addHeader("Content-Type", "application/json");
+					$response->body = json_encode($game_data->_id);
+
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+					$response->body = $e->getMessage();
+				}
+			} else {
+				$response = $bad_request_response;
+			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
