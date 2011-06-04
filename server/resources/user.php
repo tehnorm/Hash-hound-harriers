@@ -66,7 +66,7 @@ class UserResource extends Resource {
 					$user_collection = $db->users;
 					$user_collection->insert($user_data);
 
-					$user = $user_collection->findOne(array("device-id" => $params->{"device-	id"}));
+					$user = $user_collection->findOne(array("device-id" => $params->{"device-id"}));
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
