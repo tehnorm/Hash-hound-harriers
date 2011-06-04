@@ -52,7 +52,7 @@ class UserResource extends Resource {
 					if (!isset($params->{"current-loc"}->{"longitude"}) || !is_numeric($params->{"current-loc"}->{"longitude"})) throw new Exception("Missing longitude or it is not numeric");
 
 					$user_data = array(
-						"device-id" => $params->{"device_id"},
+						"device-id" => $params->{"device-id"},
 						"current-loc" => array(
 							"latitude"  => floatval($params->{"current-loc"}->{"latitude"}),
 							"longitude" => floatval($params->{"current-loc"}->{"longitude"})
@@ -130,7 +130,6 @@ class UserResource extends Resource {
 																"latitude" => $params->{"loc"}->{"latitude"},
 																"longitude" => $params->{"loc"}->{"longitude"}
 																),
-									"query"		=> array("game_")
 									"num"			=> 1
 								)
 							);
