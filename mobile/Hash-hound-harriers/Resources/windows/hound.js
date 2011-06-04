@@ -1,20 +1,24 @@
 Ti.include('../hhh.js');
 
+currentLoc = hhh.getProperty('gps');
+Ti.API.log(currentLoc);
+
 var biz_pin = Titanium.Map.createAnnotation({
-        latitude:insyncLocation.loc.lat,
-        longitude:insyncLocation.loc.lng,
-        title:insyncLocation.name,
-        subtitle:insyncLocation.address2,
-        pincolor:Titanium.Map.ANNOTATION_RED,
-        animate:true
+        latitude : currentLoc.latitude,
+        longitude : currentLoc.longitude,
+        title :'Test Point',
+        subtitle :'Some details about this point',
+        pincolor : Titanium.Map.ANNOTATION_RED,
+        animate : true
 });
 
 var map_view = Titanium.Map.createView({        
 	mapType: Titanium.Map.STANDARD_TYPE,
         region: {
-                latitude:insyncLocation.loc.lat,
-                longitude:insyncLocation.loc.lng,
-                latitudeDelta:0.01, longitudeDelta:0.01
+	        latitude : currentLoc.latitude,
+	        longitude : currentLoc.longitude,
+                latitudeDelta : 0.01,
+		longitudeDelta : 0.01
         },
         animate:true,
         regionFit:true,
@@ -22,3 +26,4 @@ var map_view = Titanium.Map.createView({
         annotations:[biz_pin]
 });
 
+currentWindow.add(map_view);

@@ -30,7 +30,7 @@ var hhh = function(){
 		'gps' : {
 			'longitude': -78.8974838256836,
 			'latitude': 35.998443603516055,
-			'accuracy': 1232
+			'accuracy': 50 
 		},
 		'heading' : 90 ,
 		'user' : {

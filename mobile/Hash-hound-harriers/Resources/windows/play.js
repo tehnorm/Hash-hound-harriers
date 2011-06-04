@@ -14,6 +14,13 @@ var start = Titanium.UI.createButton({
 start.addEventListener('click', function(e)
 {
 	Ti.API.info('start clicked');
+	var window = Titanium.UI.createWindow({
+		backgroundColor:'red',
+		url: './hare.js'
+	});
+	window.hhh = hhh;
+	window.open({fullscreen:true});
+
 });
 
 currentWindow.add(start);
@@ -40,6 +47,12 @@ var join = Titanium.UI.createButton({
 join.addEventListener('click', function(e)
 {
 	Ti.API.info('join clicked');
+	var window = Titanium.UI.createWindow({
+		backgroundColor:'green',
+		url: './hound.js'
+	});
+	window.hhh = hhh;
+	window.open({fullscreen:true});
 });
 
 currentWindow.add(join);
