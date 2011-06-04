@@ -1,6 +1,6 @@
 Ti.include('../hhh.js');
 
-currentWindow.title = 'Play Game!';
+currentWindow.title = 'Hash Hound Harriers';
 
 // Start game
 var start = Titanium.UI.createButton({

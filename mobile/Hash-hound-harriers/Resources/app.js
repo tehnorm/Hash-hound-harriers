@@ -43,7 +43,10 @@ var hhh = function(){
 			 * user.gender
 			 * user.locale
 			 */
-		}
+		},
+		'game.id' : null,
+		'game.started' : false,
+		'game.details' : null,
 	};
 
 	var data = {};
@@ -80,9 +83,6 @@ var hhh = function(){
 	return data;
 }();
 Ti.include("hhh.js");
-
-hhh.setProperty('app.js', 'testing');
-insync = hhh; // TODO: remove. confusing.
 
 /**
  * this sets the background color of the master
@@ -123,7 +123,7 @@ var accountWindow = Titanium.UI.createWindow({
 	url:'windows/account.js'
 });
 
-accountWindow.insync = insync;
+accountWindow.hhh = hhh;
 
 var accountTab = Titanium.UI.createTab({  
 	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/settings.png',
@@ -147,7 +147,7 @@ var infoWindow = Titanium.UI.createWindow({
 	url:'windows/info.js'
 });
 
-infoWindow.insync = insync;
+infoWindow.hhh = hhh;
 
 var infoTab = Titanium.UI.createTab({  
 	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/settings.png',
@@ -182,6 +182,7 @@ Ti.App.fireEvent('hide_indicator');
 ///////////////////////////////////////////
 //  GPS & HEADING - HANDLERS 
 ///////////////////////////////////////////
+
 var handle_gps_update = function(e){
 
 	if (e.error) {
@@ -192,6 +193,7 @@ var handle_gps_update = function(e){
 	hhh.setProperty('gps', e.coords);
 
 	Titanium.API.info('geo - current location: ' + new Date(e.coords.timestamp) + ' long ' + e.coords.longitude + ' lat ' + e.coords.latitude + ' accuracy ' + e.coords.accuracy);
+	Ti.API.info('Heading info: ' + JSON.stringify(e));
 
 };
 
@@ -217,19 +219,19 @@ if (Titanium.Geolocation.locationServicesEnabled==false) {
 	// Updates once 
 	Titanium.Geolocation.getCurrentPosition(function(e) {
 		Ti.API.info('GPS one time: ');
-//		return handle_gps_update(e);
+		return handle_gps_update(e);
 	});
 
 	// Updates when the location changes
 	Titanium.Geolocation.addEventListener('location',function(e) {
 		Ti.API.info('GPS location event: ');
-//		return handle_gps_update(e);
+		return handle_gps_update(e);
 	});
 
 	// Updates when the heading changes
 	Titanium.Geolocation.addEventListener('heading ',function(e) {
 		Ti.API.info('Heading event: ');
-//		return handle_heading_update(e);
+		return handle_heading_update(e);
 	});
 }
 
