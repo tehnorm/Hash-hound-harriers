@@ -112,16 +112,23 @@ class GameResource extends Resource {
 	function add_point($request) {
 		$response = new Response($request);
 
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected game_id, type, lat, long, direction";
+
 		try {
 			if ($request->data) {
-				parse_str($request->data, $params);
-				$response->code = Response::OK;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Adding a Point";
+				try {
+					$params = json_decode($request->data);
+					$response->code = Response::OK;
+					$response->addHeader("Content-Type", "text/plain");
+					$response->body = "Adding a Point";
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+				}
 			} else {
-				$response->code = Response::BADREQUEST;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Expected game_id, type, lat, long, direction";
+				$response = $bad_request_response;
 			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
@@ -145,16 +152,20 @@ class GameResource extends Resource {
 	function add_user($request) {
 		$response = new Response($request);
 
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected game_id, user_id";
+
 		try {
 			if ($request->data) {
-				parse_str($request->data, $params);
-				$response->code = Response::OK;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Adding a User to a Game";
+				try {
+					$params = json_decode($request->data);
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+				}
 			} else {
-				$response->code = Response::BADREQUEST;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Expected game_id, user_id";
+				$response = $bad_request_response;
 			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;

@@ -36,6 +36,7 @@ class UserResource extends Resource {
 	function create_user($request) {
 		$response = new Response($request);
 
+		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
 		$bad_request_response->body = "Expected device_id, lat, long, name, email";
