@@ -1,9 +1,24 @@
 <?php
 /**
+ * Creates a Game
+ *
+ * POST /game
+ *  output: HTTP OK + game (if successful),
+ *					HTTP BADREQUEST (if incorrect params),
+ *					HTTP INTERNALSERVERERROR (if unforeseen error)
+ *
+ * @uri /game
+ */
+class GameResource extends Resource {
+	function post($request) {
+	}
+}
+
+/**
  * Gets a Game
  *
  * GET /game/{id}
- *  output: game object (if successful),
+ *  output: HTTP OK + game (if successful),
  *					HTTP NOTFOUND (if not game exists for that id),
  *					HTTP INTERNALSERVERERROR (if unforeseen error)
  *
@@ -20,7 +35,7 @@ class GameResource extends Resource {
  * POST /game/point
  *   input: game_id, type, lat, long, direction
  *  output: HTTP OK (if successful),
- *					HTTP LENGTHREQUIRED (if incorrect params),
+ *					HTTP BADREQUEST (if incorrect params),
  *					HTTP NOTFOUND (if no game exists for that id),
  *					HTTP INTERNALSERVERERROR (if unforeseen error)
  *
@@ -37,7 +52,7 @@ class GameResource extends Resource {
  * POST /game/user
  *   input: game_id, user_id
  *  output: HTTP OK (if successful),
- *					HTTP LENGTHREQUIRED (if incorrect params),
+ *					HTTP BADREQUEST (if incorrect params),
  *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
  *					HTTP INTERNALSERVERERROR (if unforeseen error)
  *

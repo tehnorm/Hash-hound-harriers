@@ -5,7 +5,7 @@
  * POST /user
  *   input: device_id, lat, long, name, email
  *  output: HTTP OK + user_id (if successful),
- *					HTTP LENGTHREQUIRED (if invalid params),
+ *					HTTP BADREQUEST (if invalid params),
  *					HTTP INTERNALSERVERERROR (if unforeseen error)
  *
  * @uri /user
@@ -22,7 +22,7 @@ class UserResource extends Resource {
  * POST /user/check_location
  *   input: game_id, user_id, lat, long
  *  output: HTTP OK + point (if successful),
- *					HTTP LENGTHREQUIRED (if invalid params),
+ *					HTTP BADREQUEST (if invalid params),
  *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
  *					HTTP INTERNALSERVERERROR (if unforeseen error)
  *
