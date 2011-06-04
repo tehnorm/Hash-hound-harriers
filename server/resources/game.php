@@ -121,9 +121,6 @@ class GameResource extends Resource {
 			if ($request->data) {
 				try {
 					$params = json_decode($request->data);
-					$response->code = Response::OK;
-					$response->addHeader("Content-Type", "text/plain");
-					$response->body = "Adding a Point";
 				} catch (Exception $e) {
 					$response = $bad_request_response;
 				}
