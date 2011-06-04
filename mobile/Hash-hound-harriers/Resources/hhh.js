@@ -12,3 +12,22 @@ if(currentWindow){
 }
 
 
+var gameInProgress = function(){
+        currentGame = hhh.getProperty('game.started');
+        if(currentGame == null || currentGame == 0 || currentGame == false){
+                return false;
+        }
+        return true;
+}
+
+var pad = function(number, length) {
+   
+    var str = '' + number;
+    while (str.length < length) {
+        str = '0' + str;
+    }
+   
+    return str;
+
+}
+
