@@ -42,11 +42,36 @@ class UserResource extends Resource {
 		$bad_request_response->body = "Expected device_id, lat, long, name, email";
 
 		try {
-			if ($request->data) {
+			$data = file_get_contents("php://input");
+			if ($data) {
 				try {
-					$params = json_decode($request->data);
+					$params = json_decode($data);
+					
+					if (!isset($params->{"device_id"})) throw new Exception("Missing device_id");
+					if (!isset($params->{"lat"}) || !is_numeric($params->{"lat"})) throw new Exception("Missing lat or it is not numeric");
+					if (!isset($params->{"long"}) || !is_numeric($params->{"long"})) throw new Exception("Missing long or it is not numeric");
+
+					$user_data = array(
+						"device_id" => $params->{"device_id"},
+						"lat" 			=> floatval($params->{"lat"}),
+						"long"			=> floatval($params->{"long"}),
+						"name"			=> (isset($params->{"name"})) ? $params->{"name"} : null,
+						"email"			=> (isset($params->{"email"})) ? $params->{"email"} : null
+					);
+
+					$mongo = new Mongo(DB_SERVER);
+					$db = $mongo->hhh;
+					$user_collection = $db->users;
+					$user_collection->insert($user_data);
+
+					$user = $user_collection->findOne(array("device_id" => $params->{"device_id"}));
+
+					$response->code = Response::OK;
+					$response->addHeader("Content-Type: application/json");
+					$response->body = json_encode($user);
 				} catch (Exception $e) {
 					$response = $bad_request_response;
+					$response->body = $e->getMessage();
 				}
 			} else {
 				$response = $bad_request_response;

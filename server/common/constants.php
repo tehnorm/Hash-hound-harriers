@@ -1,5 +1,5 @@
 <?php
-define("DB_SERVER", "http://localhost:27017");
+define("DB_SERVER", "127.0.0.1:27017");
 define("DB_DATABASE", "hhh");
 define("DB_USER_COLLECTION", "users");
 define("DB_GAME_COLLECTION", "games");
