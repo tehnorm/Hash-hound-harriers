@@ -28,7 +28,7 @@ class UserResource extends Resource {
 	 * Creates a user
 	 *
 	 * POST /user
-	 *   input: device_id, lat, long, name, email
+	 *   input: device-id, current-loc {latitude, longitude}, name, email
 	 *  output: HTTP OK + user_id (if successful),
 	 *					HTTP BADREQUEST (if invalid params),
 	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
@@ -39,7 +39,7 @@ class UserResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "Expected device_id, lat, long, name, email";
+		$bad_request_response->body = "Expected device_id, latitude, longitude, name, email";
 
 		try {
 			$data = file_get_contents("php://input");
@@ -48,14 +48,14 @@ class UserResource extends Resource {
 					$params = json_decode($data);
 					
 					if (!isset($params->{"device-id"})) throw new Exception("Missing device-id");
-					if (!isset($params->{"current-loc"}->{"lat"}) || !is_numeric($params->{"current-loc"}->{"lat"})) throw new Exception("Missing lat or it is not numeric");
-					if (!isset($params->{"current-loc"}->{"long"}) || !is_numeric($params->{"current-loc"}->{"long"})) throw new Exception("Missing long or it is not numeric");
+					if (!isset($params->{"current-loc"}->{"latitude"}) || !is_numeric($params->{"current-loc"}->{"latitude"})) throw new Exception("Missing latitude or it is not numeric");
+					if (!isset($params->{"current-loc"}->{"longitude"}) || !is_numeric($params->{"current-loc"}->{"longitude"})) throw new Exception("Missing longitude or it is not numeric");
 
 					$user_data = array(
 						"device-id" => $params->{"device_id"},
 						"current-loc" => array(
-							"lat"  => floatval($params->{"current-loc"}->{"lat"}),
-							"long" => floatval($params->{"current-loc"}->{"long"})
+							"latitude"  => floatval($params->{"current-loc"}->{"latitude"}),
+							"longitude" => floatval($params->{"current-loc"}->{"longitude"})
 						),
 						"name"			=> (isset($params->{"name"})) ? $params->{"name"} : null,
 						"email"			=> (isset($params->{"email"})) ? $params->{"email"} : null
@@ -91,7 +91,7 @@ class UserResource extends Resource {
 	 * Allows the user to check their location against available points (also updates the user's location)
 	 *
 	 * POST /user/check_location
-	 *   input: game_id, user_id, lat, long
+	 *   input: game-id, user-id, latitude, longitude
 	 *  output: HTTP OK + point (if successful),
 	 *					HTTP BADREQUEST (if invalid params),
 	 *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
@@ -103,27 +103,37 @@ class UserResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "Expected game_id, user_id, lat, long";
+		$bad_request_response->body = "Expected game-id, user-id, latitude, longitude";
 
 		try {
 			if ($response->data) {
 				try {
 					$params = json_decode($request->data);
 
-					if (!isset($params->{"game_id"})) throw new Exception("Missing game_id");
-					if (!isset($params->{"user_id"})) throw new Exception("Missing user_id");
-					if (!isset($params->{"lat"}) || !is_numeric($params->{"lat"})) throw new Exception("Missing lat or it is not numeric");
-					if (!isset($params->{"long"}) || !is_numeric($params->{"long"})) throw new Exception("Missing long or it is not numeric");
+					if (!isset($params->{"game-id"})) throw new Exception("Missing game-id");
+					if (!isset($params->{"user-id"})) throw new Exception("Missing user-id");
+					if (!isset($params->{"latitude"}) || !is_numeric($params->{"latitude"})) throw new Exception("Missing latitude or it is not numeric");
+					if (!isset($params->{"longitude"}) || !is_numeric($params->{"longitude"})) throw new Exception("Missing longitude or it is not numeric");
 
 					try {
 						$mongo = new Mongo(DB_SERVER);
 						$db = $mongo->hhh;
 						$game_collection = $db->games;
 
-						$game = $game_collection->findOne($params->{"game_id"});
+						$game = $game_collection->findOne($params->{"game-id"});
 
 						if (isset($game)) {
-							
+							$points = $db->command(
+								array(
+									"geoNear" => "games.points.loc",
+									"near"		=> array(
+																"latitude" => $params->{"loc"}->{"latitude"},
+																"longitude" => $params->{"loc"}->{"longitude"}
+																),
+									"query"		=> array("game_")
+									"num"			=> 1
+								)
+							);
 						} else {
 							$response->code = Response::NOTFOUND;
 							$response->addHeader("Content-Type: text/plain");

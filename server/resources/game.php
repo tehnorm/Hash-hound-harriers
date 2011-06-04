@@ -103,7 +103,7 @@ class GameResource extends Resource {
 	 * Adds a point to the game
 	 *
 	 * POST /game/point
-	 *   input: game_id, type, lat, long, direction
+	 *   input: game_id, type, latitude, longitude, direction
 	 *  output: HTTP OK (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP NOTFOUND (if no game exists for that id),
@@ -115,7 +115,7 @@ class GameResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "Expected game_id, type, lat, long, direction";
+		$bad_request_response->body = "Expected game_id, type, latitude, longitude, direction";
 
 		try {
 			if ($request->data) {
