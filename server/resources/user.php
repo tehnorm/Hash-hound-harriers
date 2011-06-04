@@ -70,10 +70,16 @@ class UserResource extends Resource {
 		$response = new Response($request);
 
 		try {
-			parse_str($request->data, $params);
-			$response->code = Response::OK;
-			$response->addHeader("Content-Type", "text/plain");
-			$response->body = "Checking the User's Location";
+			if ($response->data) {
+				parse_str($request->data, $params);
+				$response->code = Response::OK;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = "Checking the User's Location";
+			} else {
+				$response->code = Response::BADREQUEST;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = "Expected game_id, user_id, lat, long";
+			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
