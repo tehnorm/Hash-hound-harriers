@@ -68,6 +68,8 @@ save.addEventListener('click', function(e)
 		alert('already a user - you can play!');
 		return;
 	}
+	firstNameField.blur();	
+	lastNameField.blur();	
 
 	fname = firstNameField.value ;
 	lname = lastNameField.value ;
@@ -88,7 +90,7 @@ save.addEventListener('click', function(e)
 		}
 		Ti.API.log(r);
 
-		hhh.getProperty('user', r);
+		hhh.setProperty('user', r);
 		alert('You are ready to play!');
 
 	};
