@@ -8,7 +8,7 @@ class mongo
 	public $connection;
 	public $collection;
 
-	public function __construct($host = $DB_SERVER)
+	public function __construct($host = DB_SERVER)
 	{
 		$this->connection = new Mongo($host);
 	}
