@@ -13,7 +13,7 @@ class mongo
 		$this->connection = new Mongo($host);
 	}
 
-	public function setDatabase($c)
+	public function setDatabase($c = DB_DATABASE)
 	{
 		$this->db = $this->connection->selectDB($c);
 	}
