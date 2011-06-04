@@ -37,9 +37,16 @@ class UserResource extends Resource {
 		$response = new Response($request);
 
 		try {
-			$response->code = Response::OK;
-			$response->addHeader("Content-Type", "text/plain");
-			$response->body = "Creating a User";
+			if ($request->data) {
+				parse_str($request->data, $params);
+				$response->code = Response::OK;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = var_dump($params);
+			} else {
+				$response->code = Response::BADREQUEST;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = "Expected device_id, lat, long, name, email";
+			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
@@ -63,6 +70,7 @@ class UserResource extends Resource {
 		$response = new Response($request);
 
 		try {
+			parse_str($request->data, $params);
 			$response->code = Response::OK;
 			$response->addHeader("Content-Type", "text/plain");
 			$response->body = "Checking the User's Location";
