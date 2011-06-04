@@ -7,9 +7,9 @@ if(isIPhone3_2_Plus()) {
 }
 
 ///////////////////////////////////////////
-// pERSITANT KEY/VAL STORE 
+// PERSITANT KEY/VAL STORE 
 ///////////////////////////////////////////
-var In = function(){
+var hhh = function(){
 
 	/*
 	 * gps.longitude
@@ -30,7 +30,7 @@ var In = function(){
 		'gps' : {
 			'longitude': -78.8974838256836,
 			'latitude': 35.998443603516055,
-			'accuracy': 1232
+			'accuracy': 50 
 		},
 		'heading' : 90 ,
 		'user' : {
@@ -81,8 +81,8 @@ var In = function(){
 }();
 Ti.include("hhh.js");
 
-In.setProperty('app.js', 'testing');
-insync = In; // TODO: remove. confusing.
+hhh.setProperty('app.js', 'testing');
+insync = hhh; // TODO: remove. confusing.
 
 /**
  * this sets the background color of the master
@@ -90,34 +90,34 @@ insync = In; // TODO: remove. confusing.
  */
 Titanium.UI.setBackgroundColor('#000');
 
-/**
-*   Create windows for the app
-*/
+///////////////////////////////////////////
+// TABS 
+///////////////////////////////////////////
 
 // Near 
-var nearWindow = Titanium.UI.createWindow({  
+var playWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
-	url:'windows/near.js'
+	url:'windows/play.js'
 });
 
-nearWindow.insync = insync;
+playWindow.hhh = hhh;
 
-var nearTab = Titanium.UI.createTab({  
+var playTab = Titanium.UI.createTab({  
 	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/map.png',
-	title:'Nearby',
-	window:nearWindow
+	title:'Play',
+	window:playWindow
 });
 
-nearTab.addEventListener('blur', function(e) {
-	Ti.App.fireEvent('hide_indicator');
+playTab.addEventListener('blur', function(e) {
+//	Ti.App.fireEvent('hide_indicator');
 });
 
-nearTab.addEventListener('focus', function(e) {
-	e.tab.window.fireEvent('start_near_search');
-	Ti.App.fireEvent('show_indicator');
+playTab.addEventListener('focus', function(e) {
+//	e.tab.window.fireEvent('start_near_search');
+//	Ti.App.fireEvent('show_indicator');
 });
 
-// Account
+// Account Tab 
 var accountWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
 	url:'windows/account.js'
@@ -127,15 +127,12 @@ accountWindow.insync = insync;
 
 var accountTab = Titanium.UI.createTab({  
 	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/settings.png',
-	title:'Settings',
+	title:'Account',
 	window:accountWindow
 });
 
 accountTab.addEventListener('blur', function(e) {
 	Ti.API.info('account - blur');
-        if(In.getProperty('fb.modal.open')){
-                Ti.App.fireEvent('hide_login_prompt');
-        } 
 });
 
 accountTab.addEventListener('focus', function(e) {
@@ -144,128 +141,42 @@ accountTab.addEventListener('focus', function(e) {
 });
 
 
-// Spots
-var bookmarksWindow = Titanium.UI.createWindow({  
+// Info Tab 
+var infoWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
-	url:'windows/bookmarks.js'
+	url:'windows/info.js'
 });
 
-bookmarksWindow.insync = insync;
+infoWindow.insync = insync;
 
-var bookmarksTab = Titanium.UI.createTab({  
-	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/bookmarks.png',
-	title:'Bookmarks',
-	window:bookmarksWindow
+var infoTab = Titanium.UI.createTab({  
+	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/settings.png',
+	title:'Info',
+	window:infoWindow
 });
 
-// Deals
-/* Making thing simple for now
-rightNavButton = Titanium.UI.createButton({
-	title: 'Subscribe'
+infoTab.addEventListener('blur', function(e) {
+	Ti.API.info('info - blur');
 });
 
-leftNavButton = Titanium.UI.createButton({
-	title: 'Help'
+infoTab.addEventListener('focus', function(e) {
+	Ti.API.info('info - focus');
+	e.tab.window.fireEvent('window_focus');
 });
-*/
-
-var dealsWindow = Titanium.UI.createWindow({  
-	backgroundColor:'#fff',
-//	rightNavButton: rightNavButton,
-//	leftNavButton: leftNavButton,
-	url:'windows/deals.js'
-});
-
-dealsWindow.insync = insync;
-
-var dealsTab = Titanium.UI.createTab({  
-	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/deals.png',
-	title:'Deals',
-	window:dealsWindow
-});
-
-dealsTab.addEventListener('blur', function(e) {
-	Ti.App.fireEvent('hide_indicator');
-});
-
-dealsTab.addEventListener('focus', function(e) {
-	e.tab.window.fireEvent('start_deals_search');
-	Ti.App.fireEvent('show_indicator');
-});
-
-// Search
-var searchWindow = Titanium.UI.createWindow({  
-	backgroundColor:'#fff',
-	navBarHidden: true,
-	url:'windows/search.js'
-});
-
-searchWindow.insync = insync;
-
-var searchTab = Titanium.UI.createTab({  
-	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/search.png',
-	title: 'Search',
-	window:searchWindow
-});
-
 
 /**
  *   add tabs
  */
 var tabGroup = Titanium.UI.createTabGroup();
 
-tabGroup.addTab(nearTab);  
-tabGroup.addTab(dealsTab);  
-tabGroup.addTab(searchTab);  
-tabGroup.addTab(bookmarksTab);  
+tabGroup.addTab(playTab);  
+tabGroup.addTab(infoTab);  
 tabGroup.addTab(accountTab);  
 
 // open tab group
 tabGroup.open();
-// open the search tab
-tabGroup.setActiveTab(2);
+tabGroup.setActiveTab(0);
 Ti.App.fireEvent('hide_indicator');
-
-/**
- *  Show the Search tab 
- */
-Ti.App.addEventListener('show_search', function(e) {
-	tabGroup.setActiveTab(2);
-});
-
-/**
- *  Location tabs
- */
-
-map_button = Titanium.UI.createButton({title: 'Map'});
-back_button = Titanium.UI.createButton({title: 'Back'});
-var spotWindow = Titanium.UI.createWindow({  
-	url: './windows/spot.js',
-	modal: true,
-	navBarHidden: false,
-	rightNavButton: map_button,
-	leftNavButton: back_button,
-	backButtonTitle: 'Back'
-});
-spotWindow.insync = insync;
-
-map_button.addEventListener('click',function(event){
-	spotWindow.fireEvent('show_map');
-});
-
-back_button.addEventListener('click',function(event){
-	spotWindow.fireEvent('profile_back');
-});
-
-Ti.App.addEventListener('location_show', function(){
-	tabGroup.hide();
-	spotWindow.open();
-});
-
-Ti.App.addEventListener('location_hide', function(){
-	spotWindow.close();
-	tabGroup.show();
-});
 
 
 ///////////////////////////////////////////
@@ -278,7 +189,7 @@ var handle_gps_update = function(e){
 		return;
 	}
 
-	In.setProperty('gps', e.coords);
+	hhh.setProperty('gps', e.coords);
 
 	Titanium.API.info('geo - current location: ' + new Date(e.coords.timestamp) + ' long ' + e.coords.longitude + ' lat ' + e.coords.latitude + ' accuracy ' + e.coords.accuracy);
 
@@ -291,7 +202,7 @@ var handle_heading_update = function(e){
 		return;
 	}
 
-	In.setProperty('heading', e.trueHeading);
+	hhh.setProperty('heading', e.trueHeading);
 
 	Ti.API.info('Heading info: ' + JSON.stringify(e));
 
