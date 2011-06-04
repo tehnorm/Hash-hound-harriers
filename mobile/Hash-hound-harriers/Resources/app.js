@@ -35,18 +35,16 @@ var hhh = function(){
 		'heading' : 90 ,
 		'user' : {
 			/*
-			 * user.id 
+			 * user._id : { '$id' : 1231232d33s2343  }
 			 * user.name
-			 * user.first_name
-			 * user.last_name
-			 * user.link
-			 * user.gender
-			 * user.locale
+			 * user.device-id
+			 * user.email
+			 * user.current-loc : {latitude, longitude}
 			 */
 		},
-		'game.id' : null,
+		'game.id' : 123123,
 		'game.started' : false,
-		'game.details' : null,
+		'game.details' : null
 	};
 
 	var data = {};

@@ -19,7 +19,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.tsw2011.hhh</string>
+			<string>com.innermesh.Hash-hound-harriers</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>hash-hound-harriers</string>
@@ -28,7 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.tsw2011.hhh</string>
+	<string>com.innermesh.Hash-hound-harriers</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

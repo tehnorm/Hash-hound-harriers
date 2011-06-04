@@ -29,6 +29,23 @@ var map_view = Titanium.Map.createView({
 currentWindow.add(map_view);
 
 ///////////////////////////////////
+// Game Number 
+//////////////////////////////////
+
+var gameNumber = Titanium.UI.createLabel({
+	text: hhh.getProperty('game.id'),
+	color:'#fff',
+	backgroundColor:'black',
+	style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+	'font-size': 7,
+	height: 20,
+	width: 60,
+	top: 40,
+	left: 0
+});
+currentWindow.add(gameNumber);
+
+///////////////////////////////////
 // TOP TOOLBAR
 //////////////////////////////////
 var startButton = Titanium.UI.createButton({
@@ -85,10 +102,10 @@ Ti.API.info('game not started');
 		var timer = setInterval(function(e){
 			mt++;
 
-			if(mt <= (minutes * 60)){
+			if(mt >= (minutes * 60)){
 				clearInterval(timer);
 				startButton.title = '00:00';
-				label.title = 'The hounds are loose!';
+				label.title = 'Hounds are loose!';
 			}else{
 				//total seconds - current mins * 60 
 				remaining = (minutes * 60) - mt;
@@ -96,7 +113,7 @@ Ti.API.info('game not started');
 				seconds = Math.round((((remaining / 60) - mins) * 60));
 				startButton.title = mins + ':' + pad(seconds, 2);
 			}
-		}, 1);
+		}, 1000);
 	}
 });
 

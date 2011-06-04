@@ -14,6 +14,12 @@ var start = Titanium.UI.createButton({
 start.addEventListener('click', function(e)
 {
 	Ti.API.info('start clicked');
+
+	if(!validUser()){
+                alert('Use Account to create a user!');
+                return;
+	}
+
 	var window = Titanium.UI.createWindow({
 		backgroundColor:'red',
 		url: './hare.js'
@@ -47,6 +53,12 @@ var join = Titanium.UI.createButton({
 join.addEventListener('click', function(e)
 {
 	Ti.API.info('join clicked');
+
+	if(!validUser()){
+                alert('Use Account to create a user!');
+                return;
+	}
+
 	var window = Titanium.UI.createWindow({
 		backgroundColor:'green',
 		url: './hound.js'

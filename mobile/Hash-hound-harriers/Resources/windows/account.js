@@ -63,7 +63,58 @@ var save = Titanium.UI.createButton({
 
 save.addEventListener('click', function(e)
 {
-        Ti.API.info('save clicked');
+
+	if(validUser()){
+		alert('already a user - you can play!');
+		return;
+	}
+
+	fname = firstNameField.value ;
+	lname = lastNameField.value ;
+	Ti.API.log(fname);
+	Ti.API.log(lname);
+	var xhr = Titanium.Network.createHTTPClient();
+	xhr.onload = function(){
+		Ti.API.log(this);
+		Ti.API.log(this.responseText);
+		Ti.API.log(this.responseData);
+		Ti.API.log(this.status);
+
+		try{
+			r = JSON.parse(this.responseText);
+		} catch (err) {
+			alert('No results found');
+			return ;
+		}
+		Ti.API.log(r);
+
+		hhh.getProperty('user', r);
+		alert('You are ready to play!');
+
+	};
+	var url = hhh.getProperty('app.host') + '/user';
+/*
+{ 
+	device-id : 123123,
+	current-loc : {
+		lat :
+		lng :
+	},
+	name : 'asd',
+	email : 'asdasdf@adsf.com'
+}
+*/
+        // send the data
+	var data = { 
+		'device-id' : Ti.App.id,
+		'current-loc' : hhh.getProperty('gps'),
+		name : fname + ' ' + lname,
+		email : '' 
+	};
+        xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.open('POST', url);
+        xhr.send(JSON.stringify(data));
+
 });
 
 currentWindow.add(save);

@@ -18,7 +18,7 @@ var gameInProgress = function(){
                 return false;
         }
         return true;
-}
+};
 
 var pad = function(number, length) {
    
@@ -29,5 +29,13 @@ var pad = function(number, length) {
    
     return str;
 
-}
+};
+
+var validUser = function(){
+        u = hhh.getProperty('user');
+        if(u._id !== undefined){
+                return true;
+        }
+	return false;
+};
 
