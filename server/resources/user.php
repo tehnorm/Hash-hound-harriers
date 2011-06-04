@@ -39,9 +39,22 @@ class UserResource extends Resource {
 		try {
 			if ($request->data) {
 				parse_str($request->data, $params);
-				$response->code = Response::OK;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = var_dump($params);
+
+				$device_id = (isset($params["device_id"])) ? $params["device_id"] : null;
+				$lat = (isset($params["lat"]) && is_numeric($params["lat"])) ? floatval($params["lat"]) : null;
+				$long = (isset($params["long"]) && is_numeric($params["long"])) ? floatval($params["long"]) : null;
+				$name = (isset($params["name"])) ? $params["name"] : null;
+				$email = (isset($params["email"])) ? $params["email"] : null;
+
+				if ($device_id != null && $lat != null && $long != null && $name != null && $email != null) {
+					$response->code = Response::OK;
+					$response->addHeader("Content-Type", "text/plain");
+					$response->body = "Creating a User with: $device_id, $lat, $long, $name, $email";
+				} else {
+					$response->code = Response::BADREQUEST;
+					$response->addHeader("Content-Type", "text/plain");
+					$response->body = "Expected device_id, lat, long, name, email";
+				}
 			} else {
 				$response->code = Response::BADREQUEST;
 				$response->addHeader("Content-Type", "text/plain");
