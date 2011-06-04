@@ -47,14 +47,16 @@ class UserResource extends Resource {
 				try {
 					$params = json_decode($data);
 					
-					if (!isset($params->{"device_id"})) throw new Exception("Missing device_id");
-					if (!isset($params->{"lat"}) || !is_numeric($params->{"lat"})) throw new Exception("Missing lat or it is not numeric");
-					if (!isset($params->{"long"}) || !is_numeric($params->{"long"})) throw new Exception("Missing long or it is not numeric");
+					if (!isset($params->{"device-id"})) throw new Exception("Missing device-id");
+					if (!isset($params->{"current-loc"}->{"lat"}) || !is_numeric($params->{"current-loc"}->{"lat"})) throw new Exception("Missing lat or it is not numeric");
+					if (!isset($params->{"current-loc"}->{"long"}) || !is_numeric($params->{"current-loc"}->{"long"})) throw new Exception("Missing long or it is not numeric");
 
 					$user_data = array(
-						"device_id" => $params->{"device_id"},
-						"lat" 			=> floatval($params->{"lat"}),
-						"long"			=> floatval($params->{"long"}),
+						"device-id" => $params->{"device_id"},
+						"current-loc" => array(
+							"lat"  => floatval($params->{"current-loc"}->{"lat"}),
+							"long" => floatval($params->{"current-loc"}->{"long"})
+						),
 						"name"			=> (isset($params->{"name"})) ? $params->{"name"} : null,
 						"email"			=> (isset($params->{"email"})) ? $params->{"email"} : null
 					);
@@ -64,10 +66,10 @@ class UserResource extends Resource {
 					$user_collection = $db->users;
 					$user_collection->insert($user_data);
 
-					$user = $user_collection->findOne(array("device_id" => $params->{"device_id"}));
+					$user = $user_collection->findOne(array("device-id" => $params->{"device-	id"}));
 
 					$response->code = Response::OK;
-					$response->addHeader("Content-Type: application/json");
+					$response->addHeader("Content-Type", "application/json");
 					$response->body = json_encode($user);
 				} catch (Exception $e) {
 					$response = $bad_request_response;
@@ -107,9 +109,35 @@ class UserResource extends Resource {
 			if ($response->data) {
 				try {
 					$params = json_decode($request->data);
+
+					if (!isset($params->{"game_id"})) throw new Exception("Missing game_id");
+					if (!isset($params->{"user_id"})) throw new Exception("Missing user_id");
+					if (!isset($params->{"lat"}) || !is_numeric($params->{"lat"})) throw new Exception("Missing lat or it is not numeric");
+					if (!isset($params->{"long"}) || !is_numeric($params->{"long"})) throw new Exception("Missing long or it is not numeric");
+
+					try {
+						$mongo = new Mongo(DB_SERVER);
+						$db = $mongo->hhh;
+						$game_collection = $db->games;
+
+						$game = $game_collection->findOne($params->{"game_id"});
+
+						if (isset($game)) {
+							
+						} else {
+							$response->code = Response::NOTFOUND;
+							$response->addHeader("Content-Type: text/plain");
+							$response->body = "No Game could be found";
+						}
+					} catch (Exception $e) {
+						$response->code = Response::INTERNALSERVERERROR;
+							$response->addHeader("Content-Type: text/plain");
+						$response->body = INTERNAL_SERVER_ERROR;
+					}
 				} catch (Exception $e) {
 					$response = $bad_request_response;
-				}
+					$response->body = $e->getMessage();
+				}				
 			} else {
 				$response = $bad_request_response;
 			}
