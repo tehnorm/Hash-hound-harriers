@@ -1,0 +1,21 @@
+Server Developer Setup
+
+
+
+
+Mobile Developer Setup
+
+### Installing Titanium (Appcelerator)
+#### Requirements:
+* iPhone SDK
+  * http://www.tuaw.com/2009/01/25/iphone-dev-101-downloading-and-install-the-iphone-sdk/
+* Sun Java Development Kit 6 (aka JDK 1.6)
+* Android Development Kit
+  * http://developer.android.com/sdk/installing.html
+  * Titanium requires that you copy `/platform-tools/adb` to `/tools/adb`
+
+##### OS X
+
+[Download It Here](http://www.appcelerator.com/products/download/)
+
+Install like a normal application.`
