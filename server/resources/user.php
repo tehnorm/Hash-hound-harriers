@@ -36,16 +36,19 @@ class UserResource extends Resource {
 	function create_user($request) {
 		$response = new Response($request);
 
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected device_id, lat, long, name, email";
+
 		try {
 			if ($request->data) {
-				parse_str($request->data, $params);
-				$response->code = Response::OK;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = var_dump($params);
+				try {
+					$params = json_decode($request->data);
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+				}
 			} else {
-				$response->code = Response::BADREQUEST;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Expected device_id, lat, long, name, email";
+				$response = $bad_request_response;
 			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
@@ -69,16 +72,20 @@ class UserResource extends Resource {
 	function check_location($request) {
 		$response = new Response($request);
 
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected game_id, user_id, lat, long";
+
 		try {
 			if ($response->data) {
-				parse_str($request->data, $params);
-				$response->code = Response::OK;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Checking the User's Location";
+				try {
+					$params = json_decode($request->data);
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+				}
 			} else {
-				$response->code = Response::BADREQUEST;
-				$response->addHeader("Content-Type", "text/plain");
-				$response->body = "Expected game_id, user_id, lat, long";
+				$response = $bad_request_response;
 			}
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
