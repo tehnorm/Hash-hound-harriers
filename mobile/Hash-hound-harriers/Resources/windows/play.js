@@ -24,10 +24,10 @@ start.addEventListener('click', function(e)
 	// Create the game  
         var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
-                Ti.API.log(this);
-                Ti.API.log(this.responseText);
-                Ti.API.log(this.responseData);
-                Ti.API.log(this.status);
+                Ti.API.log('log',this);
+                Ti.API.log('log',this.responseText);
+                Ti.API.log('log',this.responseData);
+                Ti.API.log('log',this.status);
 
                 try{
                         r = JSON.parse(this.responseText);
@@ -36,8 +36,8 @@ start.addEventListener('click', function(e)
                         alert('Could not create game');
                         return ;
                 }
-                Ti.API.log('setting game object');
-                Ti.API.log(r);
+                Ti.API.log('log','setting game object');
+                Ti.API.log('log',r);
 
                 hhh.setProperty('game.id', r.id);
                 hhh.setProperty('game.details', r);
@@ -112,8 +112,8 @@ join.addEventListener('click', function(e)
 	}
 
 	houndGameId = hhh.getProperty('hound.game.id');
-        Ti.API.log('houndgameid');
-        Ti.API.log(houndGameId);
+        Ti.API.log('log','houndgameid');
+        Ti.API.log('log',houndGameId);
 	if(houndGameId === null){
                 alert('Enter a Game Number!');
                 return;
@@ -122,10 +122,10 @@ join.addEventListener('click', function(e)
 	// Find the game - if a valid game load the window
         var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
-                Ti.API.log(this);
-                Ti.API.log(this.responseText);
-                Ti.API.log(this.responseData);
-                Ti.API.log(this.status);
+                Ti.API.log('log',this);
+                Ti.API.log('log',this.responseText);
+                Ti.API.log('log',this.responseData);
+                Ti.API.log('log',this.status);
 
                 try{
                         r = JSON.parse(this.responseText);
@@ -133,8 +133,8 @@ join.addEventListener('click', function(e)
                         alert('No Game found');
                         return ;
                 }
-                Ti.API.log('Setting game details - hounds');
-                Ti.API.log(r);
+                Ti.API.log('log','Setting game details - hounds');
+                Ti.API.log('log',r);
 
                 hhh.setProperty('game.id', r.id);
                 hhh.setProperty('hound.game.id', r.id);

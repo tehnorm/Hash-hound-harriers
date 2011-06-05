@@ -51,17 +51,17 @@ var hhh = function(){
 	var data = {};
 
 	data.getProperty = function(name) {
-		Ti.API.log('getting Prop ' + name + ' value ' + properties[name]);	
+		Ti.API.log('log','getting Prop ' + name + ' value ' + properties[name]);	
 		return properties[name];
 	};
 
 	data.setProperty = function(name, value) {
-		Ti.API.log('setting Prop ' + name + ' Value ' + value);	
+		Ti.API.log('log','setting Prop ' + name + ' Value ' + value);	
 		properties[name] = value;
 	};
 
 	data.append = function(name, value) {
-		Ti.API.log('appending Prop ' + name + ' Value ' + value);	
+		Ti.API.log('log','appending Prop ' + name + ' Value ' + value);	
 		properties[name].push(value);
 	};
 
