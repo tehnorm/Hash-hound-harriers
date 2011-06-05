@@ -62,9 +62,11 @@ function getColorForType(type) {
 }
 
 function addPinToMap(map_view, point) {
+	var location = point.loc;
+
 	var pin = Titanium.Map.createAnnotation({
-		latitude: point.loc.latitude,
-		longitude: point.loc.longitude,
+		latitude: location.latitude,
+		longitude: location.longitude,
 		title: getTitleForType(point.type),
 		subtitle: point["user-action"],
 		pincolor: getColorForType(point.type),
@@ -74,7 +76,7 @@ function addPinToMap(map_view, point) {
 	map_view.addAnnotation(pin);
 }
 
-var createPoint = function(type, message, map_view){
+var createPoint = function(type, mainMapView){
 
 	var that = {};
 
@@ -97,6 +99,35 @@ var createPoint = function(type, message, map_view){
                 borderWidth: 1.0,
                 borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
         });
+
+	// Direction Buttons
+	var compassPin = Titanium.Map.createAnnotation({
+		latitude : currentLoc.latitude,
+		longitude : currentLoc.longitude,
+		title :'Test Point',
+		subtitle :'Some details about this point',
+		pincolor : Titanium.Map.ANNOTATION_RED,
+		animate : true
+	});
+
+	var mapView = Titanium.Map.createView({
+		mapType: Titanium.Map.STANDARD_TYPE,
+		region: {
+			latitude : currentLoc.latitude,
+			longitude : currentLoc.longitude,
+			latitudeDelta : 0.001,
+			longitudeDelta : 0.001
+		},
+		animate:true,
+		regionFit:true,
+		userLocation:true,
+		touchEnable: false,
+		focusable : false,
+		size: {width: 310, height: 170},
+		top: 0, 
+		left: 0
+//		annotations:[compassPin]
+	});
 
 	mapView.addEventListener('touchstart', function(){
 		return false;
@@ -205,7 +236,8 @@ var createPoint = function(type, message, map_view){
 			'user-action' : detailsInput.value,
 			'game-id' : hhh.getProperty('game.id')
 		};
-	        var url = hhh.getProperty('app.host') + '/game/point';
+		var point = data;
+	        var url = "http://127.0.0.1" + '/game/point';
 	        var xhr = Titanium.Network.createHTTPClient();
 
 		xhr.onload = function() {
@@ -215,7 +247,7 @@ var createPoint = function(type, message, map_view){
 			Ti.API.log(this.status);
 
 			if(this.status == 200){
-				addPinToMap(data, map_view);
+				addPinToMap(mainMapView, point);
 			}else{
 				alert('Cound not create point');
 			}
