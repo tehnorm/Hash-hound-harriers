@@ -1,7 +1,7 @@
 Ti.include('../hhh.js');
 
 currentLoc = hhh.getProperty('gps');
-Ti.API.log(currentLoc);
+//Ti.API.log(currentLoc);
 /*
 var biz_pin = Titanium.Map.createAnnotation({
         latitude : currentLoc.latitude,
@@ -94,13 +94,13 @@ startButton.addEventListener('click', function()
 		label.title = 'Counting down!';
 		// Start the game  /POST /game/start/game_id
 	        var xhr = Titanium.Network.createHTTPClient();
-		xhr.setRequestHeader('Content-Type', 'application/json');
+		
 	        var url = hhh.getProperty('app.host') + '/game/start';
 		xhr.onload = function(){
-			Ti.API.log(this);
-			Ti.API.log(this.responseText);
-			Ti.API.log(this.responseData);
-			Ti.API.log(this.status);
+			//Ti.API.log(this);
+			//Ti.API.log(this.responseText);
+			//Ti.API.log(this.responseData);
+			//Ti.API.log(this.status);
 
 			try{
 				r = JSON.parse(this.responseText);
@@ -113,31 +113,32 @@ startButton.addEventListener('click', function()
                 	hhh.setProperty('game.details', r);
 
 
-			Ti.API.log(r);
+			//Ti.API.log(r);
 
 
 		};
 		xhr.open('POST', url);
+		xhr.setRequestHeader('Content-Type', 'application/json');
 		game_id = hhh.getProperty('game.id');
 		var geo = hhh.getProperty('gps');
 		var latitude = geo.latitude;
 		var longitude = geo.longitude;
 		data = '{"game_id" : "' +  game_id + '", "loc": {"latitude": "' + latitude + '", "longitude": "' + longitude + '"}}';
-		Ti.API.log(data);
-		Ti.API.log(url);
+		//Ti.API.log(data);
+		//Ti.API.log(url);
 
 		xhr.send(data);
 
 
 		// Add the start point	
-	        xhr = Titanium.Network.createHTTPClient();
+	        
 		xhr.setRequestHeader('Content-Type', 'application/json');
 	        url = hhh.getProperty('app.host') + '/game/point';
 		xhr.onload = function(){
-			Ti.API.log(this);
-			Ti.API.log(this.responseText);
-			Ti.API.log(this.responseData);
-			Ti.API.log(this.status);
+			//Ti.API.log(this);
+			//Ti.API.log(this.responseText);
+			//Ti.API.log(this.responseData);
+			//Ti.API.log(this.status);
 
 			if(this.status != 200){
 				alert('Could place initial point.');
@@ -145,6 +146,7 @@ startButton.addEventListener('click', function()
 			}
 		};
 		xhr.open('POST', url);
+		xhr = Titanium.Network.createHTTPClient();
 		// Grab the current cords
 		geo = hhh.getProperty('gps');
 		data = {

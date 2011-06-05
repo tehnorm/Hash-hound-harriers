@@ -73,14 +73,14 @@ save.addEventListener('click', function(e)
 
 	fname = firstNameField.value ;
 	lname = lastNameField.value ;
-	Ti.API.log(fname);
-	Ti.API.log(lname);
+	//Ti.API.log(fname);
+	//Ti.API.log(lname);
 	var xhr = Titanium.Network.createHTTPClient();
 	xhr.onload = function(){
-		Ti.API.log(this);
-		Ti.API.log(this.responseText);
-		Ti.API.log(this.responseData);
-		Ti.API.log(this.status);
+		//Ti.API.log(this);
+		//Ti.API.log(this.responseText);
+		//Ti.API.log(this.responseData);
+		//Ti.API.log(this.status);
 
 		try{
 			r = JSON.parse(this.responseText);
@@ -88,7 +88,7 @@ save.addEventListener('click', function(e)
 			alert('No results found');
 			return ;
 		}
-		Ti.API.log(r);
+		//Ti.API.log(r);
 
 		hhh.setProperty('user', r);
 		alert('You are ready to play!');
@@ -113,8 +113,9 @@ save.addEventListener('click', function(e)
 		name : fname + ' ' + lname,
 		email : '' 
 	};
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        
 	xhr.open('POST', url);
+	xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
 
 });
