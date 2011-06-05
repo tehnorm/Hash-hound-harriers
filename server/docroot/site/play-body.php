@@ -11,7 +11,7 @@
 <p>If the Hounds catch the Hare, they win.  If the Hare reaches his Endpoint, he waits happily as the Hounds come to the Endpoint.  After the race, everyone socializes to celebrate the event.
 </p>
 <br /><br />
-<h1>History</h1>
+<!--<h1>History</h1>
 
 <p>Hashing is a derivation of Hares and Hounds, also known as a Paper Chase.   Beginning in 1938 in Malaysia, 'Hash House' was the nickname of the British fraternity, and 'Harriers' was simply a name for groups who played Hares and Hounds.   
 </p>
@@ -78,3 +78,4 @@ The hare and co-hare leave the pack in the American Tobacco Campus.  The startin
 <br /><br />
 <h1>A Dead Hare Scenario</h1>
 <p>The major difference between a Live and Dead Hare is that Dead Hares are set ahead of time, allowing for more complex trails.  A trail can be set by a single individual, and reused by different groups.  However, there is less urgency and less competition, as there is no Live Hare to catch.
+-->

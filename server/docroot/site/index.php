@@ -42,7 +42,19 @@ google.load("jqueryui", "1.8.13");
 </div>
 
 <div id="body">
-Video coming soon.
+<h1>What is Hashing?</h1>
+
+<p>Hashing is a game where a Hare leaves the Hounds to set the trail.  Possible markers include Checkpoints, Arrows, False Points, and the End Point.  </p><p>
+After 15 minutes, the Hounds leaves from the starting point, breaking out into two or three smaller groups.  Front Runners search for the next markers, shouting out to the pack as they encounter them.</p><p>
+If the Hounds catch up to the Hare, they win.  If the Hare succeeds in evading the Hounds for the entirety of the race, the Hare wins.</p>
+<h1>Background </h1>
+<p>
+Hashing is a derivation of Hares and Hounds, also known as a Paper Chase.   Beginning in 1938 in Malaysia, 'Hash House' was the nickname of the British fraternity, and 'Harriers' was simply a name for groups who played Hares and Hounds.   </p><p>
+
+The American classic style of a hash is called the Okinawa style, named after the American military base in Japan where the game was introduced to Americans.</p><p>
+
+Organizations continue to exist that play this classic game.  Trails are set that are run, biked, hiked, sometimes including trips on public transportation.</p>
+
 </div>
 </body>
 </html>
