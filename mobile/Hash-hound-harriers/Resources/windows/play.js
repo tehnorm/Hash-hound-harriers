@@ -33,13 +33,13 @@ start.addEventListener('click', function(e)
                         r = JSON.parse(this.responseText);
                 } catch (err) {
                         alert('Could not create game');
-//                        return ;
+                        return ;
                 }
- //               Ti.API.log(r);
+                Ti.API.log(r);
 
 		// TODO - add real API values
-     //           hhh.setProperty('game.id', r);
-      //          hhh.setProperty('game.details', r);
+                hhh.setProperty('game.id', r.id);
+                hhh.setProperty('game.details', r);
 
 		var window = Titanium.UI.createWindow({
 			backgroundColor:'red',
@@ -50,8 +50,9 @@ start.addEventListener('click', function(e)
 
         };
         var url = hhh.getProperty('app.host') + '/game';
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.open('POST', url);
-        xhr.send();
+        xhr.send('{ "name" : ""}');
 
 
 });
@@ -120,7 +121,7 @@ join.addEventListener('click', function(e)
                 Ti.API.log(r);
 
 		// TODO - add real API values
-                hhh.setProperty('game.id', r);
+                hhh.setProperty('game.id', r.id);
                 hhh.setProperty('game.details', r);
 
 		var window = Titanium.UI.createWindow({

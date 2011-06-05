@@ -39,7 +39,7 @@ var gameNumber = Titanium.UI.createLabel({
 	style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 	'font-size': 7,
 	height: 20,
-	width: 60,
+	width: 240,
 	top: 40,
 	left: 0
 });
@@ -90,9 +90,28 @@ Ti.API.info('game started');
 Ti.API.info('game not started');
 		startButton.title = '15:00';
 		label.title = 'Counting down!';
+		// Start the game  /POST /game/start/game_id
+	        var xhr = Titanium.Network.createHTTPClient();
+		xhr.setRequestHeader('Content-Type', 'application/json');
+	        var url = hhh.getProperty('app.host') + '/game/start';
+		xhr.open('POST', url);
+		xhr.send('{"game-id" : ' + hhh.getProperty('game.id') + '}');
+
+
+		// Add the start point	
+	        var xhr = Titanium.Network.createHTTPClient();
+		xhr.setRequestHeader('Content-Type', 'application/json');
+	        var url = hhh.getProperty('app.host') + '/game/start';
+		xhr.open('POST', url);
 		// Grab the current cords
-		// Start the game  
-		// TODO: TIE TO SERVER /POST /game/start/game_id
+		geo = hhh.getProperty('gps');
+		var data = {
+			'type' : 'startpoint',
+			'lat' : geo.latitude,
+			'lng' : geo.longitude
+		};
+		xhr.send(data);
+		
 		// Set game as started
 		hhh.setProperty('game.started', true);
 
@@ -159,7 +178,7 @@ arrowButton.addEventListener('click', function(){
 	var v = new createPoint('arrow');
 });
 badTrailButton.addEventListener('click', function(){
-	var v = new createPoint('false-point');
+	var v = new createPoint('falsepoint');
 });
 
 
