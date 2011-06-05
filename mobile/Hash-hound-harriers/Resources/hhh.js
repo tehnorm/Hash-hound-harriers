@@ -241,10 +241,10 @@ var createPoint = function(type, mainMapView){
 	        var xhr = Titanium.Network.createHTTPClient();
 
 		xhr.onload = function() {
-			//Ti.API.log(this);
-			//Ti.API.log(this.responseText);
-			//Ti.API.log(this.responseData);
-			//Ti.API.log(this.status);
+			Ti.API.log('log',this);
+			Ti.API.log('log',this.responseText);
+			Ti.API.log('log',this.responseData);
+			Ti.API.log('log',this.status);
 
 			if(this.status == 200){
 				addPinToMap(mainMapView, point);
@@ -312,13 +312,13 @@ var createPicker = function(win, gameChooserLabel){
       	var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
 		var pickerView = Titanium.UI.createView({height:248,bottom:-95});
-		var picker = Titanium.UI.createPicker({top:0});
+		var picker = Titanium.UI.createPicker({top:0, useSpinner:true});
 		picker.selectionIndicator=true;
 
-                //Ti.API.log(this);
-                //Ti.API.log(this.responseText);
-                //Ti.API.log(this.responseData);
-                //Ti.API.log(this.status);
+                Ti.API.log('log',this);
+                Ti.API.log('log',this.responseText);
+                Ti.API.log('log',this.responseData);
+                Ti.API.log('log',this.status);
 
                 try{
                         values = JSON.parse(this.responseText);
@@ -326,12 +326,13 @@ var createPicker = function(win, gameChooserLabel){
                         alert('No active Games');
                         return ;
                 }
-                //Ti.API.log(values);
+                Ti.API.log('log',values);
 
 		pickerValues = [];
 		for (var i = 0; i < values.length; i++) {
-                //Ti.API.log(values[i].name);
-                //Ti.API.log(values[i].id);
+                Ti.API.log('log',values[i].name);
+                Ti.API.log('log',values[i].id);
+                
 			pickerValues[i] = Titanium.UI.createPickerRow({ 'title' : values[i].name});
 		}
 

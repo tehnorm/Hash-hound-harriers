@@ -1,7 +1,7 @@
 Ti.include('../hhh.js');
 
 currentLoc = hhh.getProperty('gps');
-//Ti.API.log(currentLoc);
+Ti.API.log('log',currentLoc);
 /*
 var biz_pin = Titanium.Map.createAnnotation({
         latitude : currentLoc.latitude,
@@ -97,10 +97,10 @@ startButton.addEventListener('click', function()
 		
 	        var url = hhh.getProperty('app.host') + '/game/start';
 		xhr.onload = function(){
-			//Ti.API.log(this);
-			//Ti.API.log(this.responseText);
-			//Ti.API.log(this.responseData);
-			//Ti.API.log(this.status);
+			Ti.API.log('log',this);
+			Ti.API.log('log',this.responseText);
+			Ti.API.log('log',this.responseData);
+			Ti.API.log('log',this.status);
 
 			try{
 				r = JSON.parse(this.responseText);
@@ -112,8 +112,7 @@ startButton.addEventListener('click', function()
 			// Add game details to the system
                 	hhh.setProperty('game.details', r);
 
-
-			//Ti.API.log(r);
+			Ti.API.log('log',r);
 
 
 		};
@@ -124,8 +123,8 @@ startButton.addEventListener('click', function()
 		var latitude = geo.latitude;
 		var longitude = geo.longitude;
 		data = '{"game_id" : "' +  game_id + '", "loc": {"latitude": "' + latitude + '", "longitude": "' + longitude + '"}}';
-		//Ti.API.log(data);
-		//Ti.API.log(url);
+		Ti.API.log('log',data);
+		Ti.API.log('log',url);
 
 		xhr.send(data);
 
@@ -135,10 +134,10 @@ startButton.addEventListener('click', function()
 		xhr.setRequestHeader('Content-Type', 'application/json');
 	        url = hhh.getProperty('app.host') + '/game/point';
 		xhr.onload = function(){
-			//Ti.API.log(this);
-			//Ti.API.log(this.responseText);
-			//Ti.API.log(this.responseData);
-			//Ti.API.log(this.status);
+			Ti.API.log('log',this);
+			Ti.API.log('log',this.responseText);
+			Ti.API.log('log',this.responseData);
+			Ti.API.log('log',this.status);
 
 			if(this.status != 200){
 				alert('Could place initial point.');
