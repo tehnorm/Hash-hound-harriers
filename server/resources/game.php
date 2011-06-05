@@ -11,7 +11,16 @@ class GameResource extends Resource {
 	function get($request) {
 		$response = new Response($request);
 
-		if (preg_match("/\/game(\/(?P<id>.*))?/", $request->uri, $matches)) {
+		if (preg_match("/\/game(\/(?P<id>.*))\/points$/", $request->uri, $matches)) {
+			if (is_string($matches["id"])) {
+				$id = $matches["id"];
+				$response = $this->get_game_points($request, $id);
+			} else {
+				$response->code = Response::BADREQUEST;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = "Expected an id";
+			}
+    } elseif (preg_match("/\/game(\/(?P<id>.*))?/", $request->uri, $matches)) {
 			if (is_string($matches["id"])) {
 				$id = $matches["id"];
 				$response = $this->get_game($request, $id);
@@ -142,6 +151,7 @@ class GameResource extends Resource {
 
 		return $response;
 	}
+
 
 	/**
 	 * Adds a point to the game
