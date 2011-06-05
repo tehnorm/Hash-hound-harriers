@@ -2,7 +2,7 @@ Ti.include('../hhh.js');
 
 currentLoc = hhh.getProperty('gps');
 Ti.API.log(currentLoc);
-
+/*
 var biz_pin = Titanium.Map.createAnnotation({
         latitude : currentLoc.latitude,
         longitude : currentLoc.longitude,
@@ -11,6 +11,7 @@ var biz_pin = Titanium.Map.createAnnotation({
         pincolor : Titanium.Map.ANNOTATION_RED,
         animate : true
 });
+*/
 
 var map_view = Titanium.Map.createView({        
 	mapType: Titanium.Map.STANDARD_TYPE,
@@ -22,8 +23,7 @@ var map_view = Titanium.Map.createView({
         },
         animate:true,
         regionFit:true,
-        userLocation:true,
-        annotations:[biz_pin]
+        userLocation:true
 });
 
 currentWindow.add(map_view);
@@ -110,7 +110,6 @@ startButton.addEventListener('click', function()
 			}
 
 			// Add game details to the system
-			hhh.setProperty('game.id', r.id);
                 	hhh.setProperty('game.details', r);
 
 
@@ -155,6 +154,7 @@ startButton.addEventListener('click', function()
 			'user-action' : 'Start Point!'
 		};
 		xhr.send(JSON.stringify(data));
+		addPinToMap(map_view, data);
 		
 		// Set game as started
 		hhh.setProperty('game.started', true);
