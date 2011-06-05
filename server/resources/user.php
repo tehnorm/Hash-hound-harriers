@@ -67,6 +67,8 @@ class UserResource extends Resource {
 
 					$users->insert($user_data);
 
+					$user_data["id"] = (string)$user_data["_id"];
+
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
 					$response->body = json_encode($user_data);
@@ -166,6 +168,8 @@ class UserResource extends Resource {
 									)
 								);
 							}
+
+							$point["id"] = (string) $point["_id"];
 
 							$response->code = Response::OK;
 							$response->addHeader("Content-Type", "application/json");

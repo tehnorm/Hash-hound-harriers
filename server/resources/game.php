@@ -104,6 +104,8 @@ class GameResource extends Resource {
           $game_collection = $db->games;
           $game_collection->insert($game_data, true);
 
+          $game_data["id"] = (string) $game_data["_id"];
+
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
 					$response->body = json_encode($game_data);
@@ -148,6 +150,8 @@ class GameResource extends Resource {
       $mongo_game_id = new MongoId($id);
       $game = $game_collection->findOne(array("_id" => $mongo_game_id));
 
+      $game["id"] = (string) $game["_id"];
+
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
       $response->body = json_encode($game);
@@ -184,6 +188,10 @@ class GameResource extends Resource {
 
       $points_collection = $db->points;
       $points = iterator_to_array($points_collection->find(array("game-id" => $mongo_game_id)));
+
+      foreach($points as $key => $point) {
+      	$points[$key]["id"] = (string)$point["_id"];
+      }
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
