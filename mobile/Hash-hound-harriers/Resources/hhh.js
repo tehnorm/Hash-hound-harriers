@@ -237,7 +237,7 @@ var createPoint = function(type, mainMapView){
 			'game-id' : hhh.getProperty('game.id')
 		};
 		var point = data;
-	        var url = "http://127.0.0.1" + '/game/point';
+	        var url = hhh.getProperty('app.host') + '/game/point';
 	        var xhr = Titanium.Network.createHTTPClient();
 
 		xhr.onload = function() {
