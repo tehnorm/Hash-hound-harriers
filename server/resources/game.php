@@ -219,8 +219,7 @@ class GameResource extends Resource {
       $db = $mongo->hhh;
       
       $game_collection = $db->games;
-
-      $mongo_game_id = new MongoId($id);
+      
       $games = iterator_to_array($game_collection->find(array()));
 
       $games_list = array();
