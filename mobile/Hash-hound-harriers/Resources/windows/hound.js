@@ -32,8 +32,10 @@ var map_view = Titanium.Map.createView({
 currentWindow.add(map_view);
 
 startPoint = {
-	latitude : gameDetails.loc.latitude,
-	longitude : gameDetails.loc.longitude,
+	loc : {	
+		latitude : gameDetails.loc.latitude,
+		longitude : gameDetails.loc.longitude
+	},
 	type : 'startpoint',
 	'user-action' : 'Start Point!'
 };
