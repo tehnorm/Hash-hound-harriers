@@ -349,10 +349,10 @@ var createPicker = function(win, gameChooserLabel){
 			style:Titanium.UI.iPhone.SystemButtonStyle.DONE
 		});
 		done.addEventListener('click',function(e) {
-			id = values[currentIndex];
+			id = values[currentIndex].id;
 			title = picker.getSelectedRow(0).title;
 			gameChooserLabel.text = '   ' + title;
-			hhh.setProperty('hare.game.id', id);
+			hhh.setProperty('hound.game.id', id);
 			pickerView.hide();
 			win.remove(pickerView);
 			win.remove(toolbar);
