@@ -157,7 +157,7 @@ class GameResource extends Resource {
 	 * Adds a point to the game
 	 *
 	 * POST /game/point
-	 *   input: game_id, type, latitude, longitude, direction
+	 *   input: game-id, type, loc {latitude, longitude}, direction
 	 *  output: HTTP OK (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP NOTFOUND (if no game exists for that id),
@@ -169,14 +169,62 @@ class GameResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "Expected game_id, type, latitude, longitude, direction";
+		$bad_request_response->body = "Expected game-id, type, user-action, loc {latitude, longitude}, direction";
 
 		try {
-			if ($request->data) {
+			$data = file_get_contents("php://input");
+			if ($data) {
+				$params = json_decode($data);
+
 				try {
 					$params = json_decode($request->data);
+
+					if (!isset($params->{"game-id"})) throw new Exception("Missing game-id");
+					if (!isset($params->{"type"})) throw new Exception("Missing type");
+					if (!isset($params->{"user-action"})) throw new Exception("Missing user-action");
+					if (!isset($params->{"loc"}->{"latitude"}) || !is_numeric($params->{"loc"}->{"latitude"})) throw new Exception("Missing loc{latitude} or it isn't numeric");
+					if (!isset($params->{"loc"}->{"longitude"}) || !is_numeric($params->{"loc"}->{"longitude"})) throw new Exception("Missing loc{longitude} or it isn't numeric");
+					
+					if ($params->{"type"} === "arrow" && (!isset($params->{"direction"}) || !is_numeric($params->{"direction"}))) throw new Exception("Missing direction or it isn't numeric (it is not an optional field when type is arrow)");
+
+					try {
+						$mongo = new Mongo(DB_SERVER);
+						$db = $mongo->hhh;
+						$points = $db->points;
+
+						$gameID = new MongoId($params->{"game-id"});
+
+						$latitude = floatval($params->{"loc"}->{"latitude"});
+						$longitude = floatval($params->{"loc"}->{"longitude"});
+
+						$point_data = array(
+							"game-id" => $gameID,
+							"type" => $params->{"type"},
+							"user-action" => $params->{"user-action"},
+							"loc" => array(
+								"latitude" => $latitude,
+								"longitude" => $longitude
+							),
+							"found-by" => array()
+						);
+
+						if ($point_data["type"] === "arrow") {
+							$point_data["direction"] = $params->{"direction"};
+						}
+
+						$points->insert($point_data);
+
+						$response->code = Response::OK;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = "The Point was added to the Game";
+					} catch (Exception $e) {
+						$response->code = Response::INTERNALSERVERERROR;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = INTERNAL_SERVER_ERROR;
+					}
 				} catch (Exception $e) {
 					$response = $bad_request_response;
+					$response->body = $e->getMessage();
 				}
 			} else {
 				$response = $bad_request_response;

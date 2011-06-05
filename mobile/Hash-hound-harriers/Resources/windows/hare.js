@@ -148,6 +148,19 @@ var badTrailButton = Titanium.UI.createButton({
 	style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
 });
 
+// Button Events
+hhhButton.addEventListener('click', function(){
+	var v = new createPoint('endpoint');
+});
+checkPointButton.addEventListener('click', function(){
+	var v = new createPoint('checkpoint');
+});
+arrowButton.addEventListener('click', function(){
+	var v = new createPoint('arrow');
+});
+badTrailButton.addEventListener('click', function(){
+	var v = new createPoint('false-point');
+});
 
 
 var flexSpace = Titanium.UI.createButton({
