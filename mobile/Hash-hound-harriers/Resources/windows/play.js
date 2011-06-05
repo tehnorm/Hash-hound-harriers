@@ -21,7 +21,7 @@ start.addEventListener('click', function(e)
 	}
 
 
-	// Create the game and put the hound into it 
+	// Create the game  
         var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
                 Ti.API.log(this);
@@ -31,6 +31,7 @@ start.addEventListener('click', function(e)
 
                 try{
                         r = JSON.parse(this.responseText);
+			// Put the hound into it
                 } catch (err) {
                         alert('Could not create game');
                         return ;
@@ -51,8 +52,9 @@ start.addEventListener('click', function(e)
         };
         var url = hhh.getProperty('app.host') + '/game';
         xhr.setRequestHeader('Content-Type', 'application/json');
+        user = hhh.getProperty('user');
         xhr.open('POST', url);
-        xhr.send('{ "name" : ""}');
+        xhr.send('{ "name" : "", "hare-id" : "' + user.id  + '"}');
 
 
 });
@@ -73,13 +75,19 @@ currentWindow.add(orLabel);
 
 // Join Game
 
-var gameNumber = Titanium.UI.createTextField({
+var gameNumber = Titanium.UI.createLabel({
         hintText:'Game Number',
         height:35,
         top:120,
         left:30,
         width:250,
         borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
+});
+
+gameNumber.addEventListener('click', function(){
+	
+	createPicker();
+
 });
 
 var join = Titanium.UI.createButton({
