@@ -38,7 +38,6 @@ start.addEventListener('click', function(e)
                 }
                 Ti.API.log(r);
 
-		// TODO - add real API values
                 hhh.setProperty('game.id', r.id);
                 hhh.setProperty('game.details', r);
 
