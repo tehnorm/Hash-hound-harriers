@@ -218,17 +218,21 @@ class GameResource extends Resource {
 
       $mongo_game_id = new MongoId($id);
       $games = iterator_to_array($game_collection->find(array()));
+
+      $games_list = array();
+
       foreach($games as $key => $game) {
         if (!isset($game["started"]) || ($game["started"] == "ENDED")){
           unset($games[$key]);
         }else{
           $games[$key]["id"] = (string)$game["_id"];
+        	$games_list[] = $games[$key];
         }
       }
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
-      $response->body = json_encode((array)$games);
+      $response->body = json_encode($games_list);
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
@@ -263,8 +267,11 @@ class GameResource extends Resource {
       $points_collection = $db->points;
       $points = iterator_to_array($points_collection->find(array("game-id" => $mongo_game_id)));
 
+      $points_list = array();
+
       foreach($points as $key => $point) {
       	$points[$key]["id"] = (string)$point["_id"];
+      	$points_list[] = $points[$key];
       }
 
       $response->code = Response::OK;
