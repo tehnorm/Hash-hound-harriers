@@ -15,6 +15,8 @@ class UserResource extends Resource {
 			$response = $this->create_user($request);
 		} elseif (preg_match("/\/user\/check_location$/", $request->uri, $matches)) {
 			$response = $this->check_location($request);
+		} elseif (preg_match("/\/user\/found_point$/", $request->uri, $matches)) {
+			$response = $this->user_found_point($request);
 		} else {
 			$response->code = Response::BADREQUEST;
 			$response->addHeader("Content-Type", "text/plain");
@@ -188,6 +190,81 @@ class UserResource extends Resource {
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
 				}				
+			} else {
+				$response = $bad_request_response;
+			}
+		} catch (Exception $e) {
+			$response->code = Response::INTERNALSERVERERROR;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = INTERNAL_SERVER_ERROR;
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Adds a user to the found-by array for the game
+	 *
+	 * POST /user/found_point
+	 *   input: user-id, point-id
+	 *  output: HTTP OK (if successful),
+	 *					HTTP BADREQUEST (if incorrect params),
+	 *					HTTP NOTFOUND (if no game exists for that id),
+	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
+	 */
+	function user_found_point($request) {
+		$response = new Response($request);
+
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected user-id, point-id";
+
+		try {
+			$data = file_get_contents("php://input");
+			if ($data) {
+				$params = json_decode($data);
+
+				try {
+					$params = json_decode($request->data);
+
+					if (!isset($params->{"user-id"})) throw new Exception("Missing user-id");
+					if (!isset($params->{"point-id"})) throw new Exception("Missing point-id");
+
+					try {
+						$mongo = new Mongo(DB_SERVER);
+						$db = $mongo->hhh;
+						$point_collection = $db->points;
+
+						$user_id = new MongoId($params->{"user-id"});
+						$point_id = new MongoId($params->{"point-id"});
+            
+            $point = $point_collection->findOne(array("_id" => $point_id));
+            
+            if ($point != null) {
+              if (!isset($point["found-by"])) $point["found-by"] = array();
+
+              $point["id"] = (string) $point["_id"];
+            
+              $point_collection->update(
+									array("_id" => $point["_id"]),
+									array('$push' => array("found-by" => $user_id))
+								);
+							}
+
+            var_dump($point);
+						$response->code = Response::OK;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = "The user was added to the points found";
+					} catch (Exception $e) {
+						$response->code = Response::INTERNALSERVERERROR;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = INTERNAL_SERVER_ERROR;
+					}
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+					$response->body = $e->getMessage();
+				}
 			} else {
 				$response = $bad_request_response;
 			}
