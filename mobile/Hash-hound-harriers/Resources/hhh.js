@@ -193,12 +193,31 @@ var createPoint = function(type){
 		// send the data
 		var geo = hhh.getProperty('gps');
 		var data = {
-			'type' : Titanium.Platform.createUUID(),
-			'lat' : geo.latitude,
-			'lng' : geo.longitude,
+			'type' : type,
+			'loc' : {'latitude' : geo.latitude, 'longitude' : geo.longitude},
 			'direction' : hhh.getProperty('heading'),
-			'user-action' : detailsInput.valued,
+			'user-action' : detailsInput.value,
+			'game-id' : hhh.getProperty('game.id'),
 		};
+	        var url = hhh.getProperty('app.host') + '/game/point';
+	        var xhr = Titanium.Network.createHTTPClient();
+
+		xhr.onload = function() {
+			Ti.API.log(this);
+			Ti.API.log(this.responseText);
+			Ti.API.log(this.responseData);
+			Ti.API.log(this.status);
+
+			if(this.status == 200){
+				alert('Point Created');
+				// TODO : update checkpoints on the map
+			}else{
+				alert('Cound not create point');
+			}
+			return ;
+
+		};
+
 		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.open('POST', url);
 		xhr.send(JSON.stringify(data));
