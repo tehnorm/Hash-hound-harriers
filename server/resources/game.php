@@ -105,11 +105,11 @@ class GameResource extends Resource {
           if (!isset($params->{"hare-id"})) throw new Exception("Missing hare-id");
 
           if (!isset($params->{"name"}) || $params->{"name"} === "") {
-          	$adjectives = array("drunk", "lost", "running", "tipsy", "inebriated");
-          	$nouns = array("hares", "hounds", "hunters", "lemurs");
+          	$adjectives = array("Spiffy","Drunk","Lost","Running","Tipsy","Inebriated","Colossal","Puny","Gigantic","Bitter","Adorable","Hopped-up","Fierce","Awesome","Brave","Victorious");
+          	$nouns = array("Hares","Hounds","Hunters","Lemurs","Rabbits","Puppies","Bunnies","Dogs","Chasers","Animals","Creatures","Mammals","Wolves");
 
-          	$adjective = array_rand($adjectives);
-          	$noun = array_rand($nouns);
+          	$adjective = $adjectives[array_rand($adjectives)];
+          	$noun = $nouns[array_rand($nouns)];
           	$number = rand(0, 9999);
 
           	$name = "$adjective $noun $number";
