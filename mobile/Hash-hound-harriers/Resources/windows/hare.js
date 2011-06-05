@@ -207,16 +207,16 @@ var badTrailButton = Titanium.UI.createButton({
 
 // Button Events
 hhhButton.addEventListener('click', function(){
-	var v = new createPoint('endpoint');
+	var v = new createPoint('endpoint', map_view);
 });
 checkPointButton.addEventListener('click', function(){
-	var v = new createPoint('checkpoint');
+	var v = new createPoint('checkpoint', map_view);
 });
 arrowButton.addEventListener('click', function(){
-	var v = new createPoint('arrow');
+	var v = new createPoint('arrow', map_view);
 });
 badTrailButton.addEventListener('click', function(){
-	var v = new createPoint('falsepoint');
+	var v = new createPoint('falsepoint', map_view);
 });
 
 

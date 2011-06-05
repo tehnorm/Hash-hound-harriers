@@ -39,7 +39,42 @@ var validUser = function(){
 	return false;
 };
 
-var createPoint = function(type){
+function getTitleForType(type) {
+	switch(type) {
+		case "startpoint": return "Start Point";
+		case "checkpoint": return "Checkpoint";
+		case "arrow": return "Arrow";
+		case "falsepoint": return "False Point";
+		case "endpoint": return "End Point";
+		default: return "Checkpoint";
+	}
+}
+
+function getColorForType(type) {
+	switch(type) {
+		case "startpoint": return Titanium.Map.ANNOTATION_GREEN;
+		case "checkpoint": return Titanium.Map.ANNOTATION_GREEN;
+		case "arrow": return Titanium.Map.ANNOTATION_PURPLE;
+		case "falsepoint": return Titanium.Map.ANNOTATION_RED;
+		case "endpoint": return Titanium.Map.ANNOTATION_GREEN;
+		default: return Titanium.Map.ANNOTATION_GREEN;
+	}
+}
+
+function addPinToMap(map_view, point) {
+	var pin = Titanium.Map.createAnnotation({
+		latitude: point.loc.latitude,
+		longitude: point.loc.longitude,
+		title: getTitleForType(point.type),
+		subtitle: point["user-action"],
+		pincolor: getColorForType(point.type),
+		animate: true
+	});
+
+	map_view.addAnnotation(pin);
+}
+
+var createPoint = function(type, message, map_view){
 
 	var that = {};
 
@@ -62,35 +97,6 @@ var createPoint = function(type){
                 borderWidth: 1.0,
                 borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
         });
-
-	// Direction Buttons
-	var compassPin = Titanium.Map.createAnnotation({
-		latitude : currentLoc.latitude,
-		longitude : currentLoc.longitude,
-		title :'Test Point',
-		subtitle :'Some details about this point',
-		pincolor : Titanium.Map.ANNOTATION_RED,
-		animate : true
-	});
-
-	var mapView = Titanium.Map.createView({
-		mapType: Titanium.Map.STANDARD_TYPE,
-		region: {
-			latitude : currentLoc.latitude,
-			longitude : currentLoc.longitude,
-			latitudeDelta : 0.001,
-			longitudeDelta : 0.001
-		},
-		animate:true,
-		regionFit:true,
-		userLocation:true,
-		touchEnable: false,
-		focusable : false,
-		size: {width: 310, height: 170},
-		top: 0, 
-		left: 0
-//		annotations:[compassPin]
-	});
 
 	mapView.addEventListener('touchstart', function(){
 		return false;
@@ -209,8 +215,7 @@ var createPoint = function(type){
 			Ti.API.log(this.status);
 
 			if(this.status == 200){
-				alert('Point Created');
-				// TODO : update checkpoints on the map
+				addPinToMap(data, map_view);
 			}else{
 				alert('Cound not create point');
 			}
@@ -268,41 +273,6 @@ var createPoint = function(type){
 
 	return that;
 };
-
-function getTitleForType(type) {
-	switch(type) {
-		case "startpoint": return "Start Point";
-		case "checkpoint": return "Checkpoint";
-		case "arrow": return "Arrow";
-		case "falsepoint": return "False Point";
-		case "endpoint": return "End Point";
-		default: return "Checkpoint";
-	}
-}
-
-function getColorForType(type) {
-	switch(type) {
-		case "startpoint": return Titanium.Map.ANNOTATION_GREEN;
-		case "checkpoint": return Titanium.Map.ANNOTATION_GREEN;
-		case "arrow": return Titanium.Map.ANNOTATION_PURPLE;
-		case "falsepoint": return Titanium.Map.ANNOTATION_RED;
-		case "endpoint": return Titanium.Map.ANNOTATION_GREEN;
-		default: return Titanium.Map.ANNOTATION_GREEN;
-	}
-}
-
-function addPinToMap(map_view, point) {
-	var pin = Titanium.Map.createAnnotation({
-		latitude: point.loc.latitude,
-		longitude: point.loc.longitude,
-		title: getTitleForType(point.type),
-		subtitle: point["user-action"],
-		pincolor: getColorForType(point.type),
-		animate: true
-	});
-
-	map_view.addAnnotation(pin);
-}
 
 var createPicker = function(win, gameChooserLabel){
 
