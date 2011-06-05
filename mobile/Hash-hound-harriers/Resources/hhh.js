@@ -197,7 +197,7 @@ var createPoint = function(type){
 			'loc' : {'latitude' : geo.latitude, 'longitude' : geo.longitude},
 			'direction' : hhh.getProperty('heading'),
 			'user-action' : detailsInput.value,
-			'game-id' : hhh.getProperty('game.id'),
+			'game-id' : hhh.getProperty('game.id')
 		};
 	        var url = hhh.getProperty('app.host') + '/game/point';
 	        var xhr = Titanium.Network.createHTTPClient();
@@ -268,3 +268,82 @@ var createPoint = function(type){
 
 	return that;
 };
+
+
+
+var createPicker = function(){
+	win = currentWindow;
+	var pickerView = Titanium.UI.createView({height:248,bottom:-248});
+	var picker = Titanium.UI.createPicker({top:0});
+	picker.selectionIndicator=true;
+
+      	var xhr = Titanium.Network.createHTTPClient();
+        xhr.onload = function(){
+                Ti.API.log(this);
+                Ti.API.log(this.responseText);
+                Ti.API.log(this.responseData);
+                Ti.API.log(this.status);
+
+                try{
+                        r = JSON.parse(this.responseText);
+                } catch (err) {
+                        alert('Could not create game');
+                        return ;
+                }
+                Ti.API.log(r);
+
+		pickerValues = [];
+		for (var i = 0; i < values.length; i++) {
+			pickerValues[i] = Titanium.UI.createPickerRow({title:values[i]});
+		}
+
+		var cancel =  Titanium.UI.createButton({
+			title:'Cancel',
+			style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+		});
+		cancel.addEventListener('click',function(e) {
+			pickerView.animate(slideOut);
+			win.remove(pickerView);
+			iCanHazPicker = false;
+			win.remove(toolbar);
+			button.show();
+		});
+
+		var done =  Titanium.UI.createButton({
+			title:'Done',
+			style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+		});
+		done.addEventListener('click',function(e) {
+			data[index].text = picker.getSelectedRow(0).title;
+			pickerView.animate(slideOut);
+			win.remove(pickerView);
+			iCanHazPicker = false;
+			win.remove(toolbar);
+			button.show();
+		});
+
+		var spacer =  Titanium.UI.createButton({
+			systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+		});
+
+		var toolbar =  Titanium.UI.createToolbar({
+			top:170,
+			items:[cancel,spacer,done]
+		});
+
+		picker.add(pickerValues);
+		win.add(toolbar);
+		pickerView.add(picker);
+
+        };
+        var url = hhh.getProperty('app.host') + '/game/list_active';
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.open('GET', url);
+        xhr.send();
+
+
+	
+
+	return pickerView;
+};
+

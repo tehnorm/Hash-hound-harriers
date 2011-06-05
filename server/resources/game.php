@@ -79,7 +79,7 @@ class GameResource extends Resource {
 	 * Creates a Game
 	 *
 	 * POST /game
-	 *   input: name
+	 *   input: name, user-id
 	 *  output: HTTP OK + game (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
@@ -102,10 +102,14 @@ class GameResource extends Resource {
         try {
           $params = json_decode($data);
 					
-          if (!isset($params->{"name"})) throw new Exception("Missing name");     
+          if (!isset($params->{"name"})) throw new Exception("Missing name"); 
+          if (!isset($params->{"hare-id"})) throw new Exception("Missing hare-id");
+          
+          $hareID = new MongoId($params->{"hare-id"});
+              
           $game_data = array(
 	          "name"			=> $params->{"name"},
-	          "hare"			=> null,
+	          "hare"			=> $hareID,
 	          "co-hares"	=> array(),
 	          "created"		=> new MongoDate(time()),
 	          "started"		=> null,
@@ -118,6 +122,7 @@ class GameResource extends Resource {
           $game_collection->insert($game_data, true);
 
           $game_data["id"] = (string) $game_data["_id"];
+          $game_data["hare-id"] = (string) $game_data["hare"];
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
