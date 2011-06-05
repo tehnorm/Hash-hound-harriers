@@ -96,7 +96,6 @@ class GameResource extends Resource {
           $db = $mongo->hhh;
           $game_collection = $db->games;
           $game_collection->insert($game_data, true);
-          $game_data = $game_data["_id"];
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
