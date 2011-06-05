@@ -83,7 +83,7 @@ currentWindow.add(toolbar);
 // POLLING FOR PINS 
 //////////////////////////////////
 
-var harePolling = function(){
+var houndPolling = function(){
         var xhr = Titanium.Network.createHTTPClient();
         xhr.setRequestHeader('Content-Type', 'application/json');
         var url = hhh.getProperty('app.host') + '/user/check_location';
@@ -129,4 +129,10 @@ var harePolling = function(){
 
         xhr.send(JSON.stringify(data));
 
-}();
+};
+
+
+var timer = setInterval(function(e){
+	Ti.API.log('polling for points');
+	houndPolling();	
+}, 60000);

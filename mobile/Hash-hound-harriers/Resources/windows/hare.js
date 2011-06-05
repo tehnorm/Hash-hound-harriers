@@ -83,13 +83,13 @@ closeButton.addEventListener('click', function()
 startButton.addEventListener('click', function()
 {
 
-Ti.API.info(gameInProgress());
+	Ti.API.info(gameInProgress());
 	if(gameInProgress() === true){
 		// Game alrady started
-Ti.API.info('game started');
+		Ti.API.info('game started');
 		return '';
 	}else{
-Ti.API.info('game not started');
+		Ti.API.info('game not started');
 		startButton.title = '15:00';
 		label.title = 'Counting down!';
 		// Start the game  /POST /game/start/game_id
@@ -108,6 +108,12 @@ Ti.API.info('game not started');
 				alert('Could not start game.');
 				return ;
 			}
+
+			// Add game details to the system
+			hhh.setProperty('game.id', r.id);
+                	hhh.setProperty('game.details', r);
+
+
 			Ti.API.log(r);
 
 
@@ -288,4 +294,4 @@ var harePolling = function(){
 
 	xhr.send(JSON.stringify(data));
 
-}();
+};
