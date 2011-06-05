@@ -12,6 +12,7 @@ class GameResource extends Resource {
 		$response = new Response($request);
 
 		if (preg_match("/\/game(\/(?P<id>.*))\/points$/", $request->uri, $matches)) {
+      var_dump("list");
 			if (is_string($matches["id"])) {
 				$id = $matches["id"];
 				$response = $this->get_game_points($request, $id);
@@ -20,6 +21,8 @@ class GameResource extends Resource {
 				$response->addHeader("Content-Type", "text/plain");
 				$response->body = "Expected an id";
 			}
+		} elseif (preg_match("/\/game\/list_active$/", $request->uri, $matches)) {
+      $response = $this->get_active_games($request);
     } elseif (preg_match("/\/game(\/(?P<id>.*))?/", $request->uri, $matches)) {
 			if (is_string($matches["id"])) {
 				$id = $matches["id"];
@@ -155,6 +158,55 @@ class GameResource extends Resource {
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
       $response->body = json_encode($game);
+		} catch (Exception $e) {
+			$response->code = Response::INTERNALSERVERERROR;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = INTERNAL_SERVER_ERROR;
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Gets a Game List
+	 *
+	 * GET /game/list_active 
+	 *  output: HTTP OK + game (if successful),
+	 *					HTTP NOTFOUND (if not game exists for that id),
+	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
+	 */
+	function get_active_games($request) {
+		$response = new Response($request);
+		
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected id";
+
+    try{
+      $mongo = new Mongo(DB_SERVER);
+      $db = $mongo->hhh;
+      
+      $game_collection = $db->games;
+
+      $mongo_game_id = new MongoId($id);
+      $games = iterator_to_array($game_collection->find(array()));
+      foreach($games as $key => $game) {
+        //        if (!isset($game["started"])||($game["started"] == "ENDED")){
+        if (!isset($game["started"])){
+          /* var_dump("dumping game"); */
+          /* var_dump($games[$key]); */
+          unset($games[$key]);
+        }else{
+          $games[$key]["id"] = (string)$game["_id"];
+        }
+      }
+      var_dump($games);
+
+
+      $response->code = Response::OK;
+      $response->addHeader("Content-Type", "application/json");
+      $response->body = json_encode($games);
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
