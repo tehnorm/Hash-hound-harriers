@@ -125,7 +125,11 @@ class GameResource extends Resource {
 	          "co-hares"	=> array(),
 	          "created"		=> new MongoDate(time()),
 	          "started"		=> null,
-	          "hounds"		=> array()
+	          "hounds"		=> array(),
+	          "loc"				=> array(
+	          	"latitude" => null,
+	          	"longitude" => null
+		        )
 	         );
           
           $mongo = new Mongo(DB_SERVER);
