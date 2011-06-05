@@ -269,7 +269,40 @@ var createPoint = function(type){
 	return that;
 };
 
+function getTitleForType(type) {
+	switch(type) {
+		case "startpoint": return "Start Point";
+		case "checkpoint": return "Checkpoint";
+		case "arrow": return "Arrow";
+		case "falsepoint": return "False Point";
+		case "endpoint": return "End Point";
+		default: return "Checkpoint";
+	}
+}
 
+function getColorForType(type) {
+	switch(type) {
+		case "startpoint": return Titanium.Map.ANNOTATION_GREEN;
+		case "checkpoint": return Titanium.Map.ANNOTATION_GREEN;
+		case "arrow": return Titanium.Map.ANNOTATION_PURPLE;
+		case "falsepoint": return Titanium.Map.ANNOTATION_RED;
+		case "endpoint": return Titanium.Map.ANNOTATION_GREEN;
+		default: return Titanium.Map.ANNOTATION_GREEN;
+	}
+}
+
+function addPinToMap(map_view, point) {
+	var pin = Titanium.Map.createAnnotation({
+		latitude: point.loc.latitude,
+		longitude: point.loc.longitude,
+		title: getTitleForType(point.type),
+		subtitle: point["user-action"],
+		pincolor: getColorForType(point.type),
+		animate: true
+	});
+
+	map_view.addAnnotation(pin);
+}
 
 var createPicker = function(win, gameChooserLabel){
 
