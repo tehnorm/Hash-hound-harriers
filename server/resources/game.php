@@ -66,6 +66,7 @@ class GameResource extends Resource {
 	 * Creates a Game
 	 *
 	 * POST /game
+	 *   input: name
 	 *  output: HTTP OK + game (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
@@ -76,7 +77,7 @@ class GameResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "";
+		$bad_request_response->body = "Expected name";
     
 		try {
 			$response->code = Response::OK;
@@ -99,8 +100,7 @@ class GameResource extends Resource {
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
-					$response->body = json_encode($game_data->_id);
-
+					$response->body = json_encode($game_data);
 				} catch (Exception $e) {
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
