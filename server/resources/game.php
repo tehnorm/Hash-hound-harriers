@@ -46,7 +46,7 @@ class GameResource extends Resource {
 
 		if (preg_match("/\/game$/", $request->uri, $matches)) {
 			$response = $this->create_game($request);
-		} elseif (preg_match("/\/game\/add_point$/", $request->uri, $matches)) {
+		} elseif (preg_match("/\/game\/point$/", $request->uri, $matches)) {
 			$response = $this->add_point($request);
 		} elseif (preg_match("/\/game\/add_user$/", $request->uri, $matches)) {
 			$response = $this->add_user($request);
