@@ -35,10 +35,6 @@ google.load("jqueryui", "1.8.13");
 </div>
 
 <div id="iphone">
-    <div id="desc">
-        <?php include "desc.php"; ?>
-        <a id="download" href="">Download</a>
-    </div>
 </div>
 
 <div id="body">
