@@ -90,7 +90,14 @@ class GameResource extends Resource {
           $params = json_decode($data);
 					
           if (!isset($params->{"name"})) throw new Exception("Missing name");     
-          $game_data = array("name" => $params->{"name"});
+          $game_data = array(
+	          "name"			=> $params->{"name"},
+	          "hare"			=> null,
+	          "co-hares"	=> array(),
+	          "created"		=> new MongoDate(time()),
+	          "started"		=> null,
+	          "hounds"		=> array()
+	         );
           
           $mongo = new Mongo(DB_SERVER);
           $db = $mongo->hhh;
