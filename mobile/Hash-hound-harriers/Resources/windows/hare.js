@@ -114,7 +114,10 @@ Ti.API.info('game not started');
 		};
 		xhr.open('POST', url);
 		game_id = hhh.getProperty('game.id');
-		data = '{"game_id" : "' +  game_id + '"}';
+		var geo = hhh.getProperty('gps');
+		var latitude = geo.latitude;
+		var longitude = geo.longitude;
+		data = '{"game_id" : "' +  game_id + '", "loc": {"latitude": "' + latitude + '", "longitude": "' + longitude + '"}}';
 		Ti.API.log(data);
 		Ti.API.log(url);
 
