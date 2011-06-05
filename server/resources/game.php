@@ -122,6 +122,7 @@ class GameResource extends Resource {
           $game_collection->insert($game_data, true);
 
           $game_data["id"] = (string) $game_data["_id"];
+          $game_data["hare-id"] = (string) $game_data["hare"];
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
