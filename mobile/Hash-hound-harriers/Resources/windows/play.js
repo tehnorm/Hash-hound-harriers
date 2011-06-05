@@ -36,6 +36,7 @@ start.addEventListener('click', function(e)
                         alert('Could not create game');
                         return ;
                 }
+                Ti.API.log('setting game object');
                 Ti.API.log(r);
 
                 hhh.setProperty('game.id', r.id);
@@ -110,7 +111,9 @@ join.addEventListener('click', function(e)
                 return;
 	}
 
-	houndGameId = hhh.setProperty('hound.game.id');
+	houndGameId = hhh.getProperty('hound.game.id');
+        Ti.API.log('houndgameid');
+        Ti.API.log(houndGameId);
 	if(houndGameId === null){
                 alert('Enter a Game Number!');
                 return;
@@ -130,6 +133,7 @@ join.addEventListener('click', function(e)
                         alert('No Game found');
                         return ;
                 }
+                Ti.API.log('Setting game details - hounds');
                 Ti.API.log(r);
 
                 hhh.setProperty('game.id', r.id);
