@@ -269,32 +269,68 @@ var createPoint = function(type){
 	return that;
 };
 
+function getTitleForType(type) {
+	switch(type) {
+		case "startpoint": return "Start Point";
+		case "checkpoint": return "Checkpoint";
+		case "arrow": return "Arrow";
+		case "falsepoint": return "False Point";
+		case "endpoint": return "End Point";
+		default: return "Checkpoint";
+	}
+}
 
+function getColorForType(type) {
+	switch(type) {
+		case "startpoint": return Titanium.Map.ANNOTATION_GREEN;
+		case "checkpoint": return Titanium.Map.ANNOTATION_GREEN;
+		case "arrow": return Titanium.Map.ANNOTATION_PURPLE;
+		case "falsepoint": return Titanium.Map.ANNOTATION_RED;
+		case "endpoint": return Titanium.Map.ANNOTATION_GREEN;
+		default: return Titanium.Map.ANNOTATION_GREEN;
+	}
+}
 
-var createPicker = function(){
-	win = currentWindow;
-	var pickerView = Titanium.UI.createView({height:248,bottom:-248});
-	var picker = Titanium.UI.createPicker({top:0});
-	picker.selectionIndicator=true;
+function addPinToMap(map_view, point) {
+	var pin = Titanium.Map.createAnnotation({
+		latitude: point.loc.latitude,
+		longitude: point.loc.longitude,
+		title: getTitleForType(point.type),
+		subtitle: point["user-action"],
+		pincolor: getColorForType(point.type),
+		animate: true
+	});
+
+	map_view.addAnnotation(pin);
+}
+
+var createPicker = function(win, gameChooserLabel){
+
 
       	var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
+		var pickerView = Titanium.UI.createView({height:248,bottom:-95});
+		var picker = Titanium.UI.createPicker({top:0});
+		picker.selectionIndicator=true;
+
                 Ti.API.log(this);
                 Ti.API.log(this.responseText);
                 Ti.API.log(this.responseData);
                 Ti.API.log(this.status);
 
                 try{
-                        r = JSON.parse(this.responseText);
+                        values = JSON.parse(this.responseText);
                 } catch (err) {
-                        alert('Could not create game');
+                        alert('No active Games');
                         return ;
                 }
-                Ti.API.log(r);
+                Ti.API.log(values);
 
 		pickerValues = [];
 		for (var i = 0; i < values.length; i++) {
-			pickerValues[i] = Titanium.UI.createPickerRow({title:values[i]});
+                Ti.API.log(values[i].name);
+                Ti.API.log(values[i].id);
+			pickerValues[i] = Titanium.UI.createPickerRow({ 'title' : values[i].name});
 		}
 
 		var cancel =  Titanium.UI.createButton({
@@ -302,24 +338,29 @@ var createPicker = function(){
 			style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
 		});
 		cancel.addEventListener('click',function(e) {
-			pickerView.animate(slideOut);
+			pickerView.hide();
 			win.remove(pickerView);
 			iCanHazPicker = false;
 			win.remove(toolbar);
-			button.show();
 		});
 
 		var done =  Titanium.UI.createButton({
-			title:'Done',
+			title:'Choose',
 			style:Titanium.UI.iPhone.SystemButtonStyle.DONE
 		});
 		done.addEventListener('click',function(e) {
-			data[index].text = picker.getSelectedRow(0).title;
-			pickerView.animate(slideOut);
+			id = values[currentIndex];
+			title = picker.getSelectedRow(0).title;
+			gameChooserLabel.text = '   ' + title;
+			hhh.setProperty('hare.game.id', id);
+			pickerView.hide();
 			win.remove(pickerView);
-			iCanHazPicker = false;
 			win.remove(toolbar);
-			button.show();
+		});
+
+		var currentIndex = 0;
+		picker.addEventListener('change', function(e){
+			currentIndex = e.rowIndex;
 		});
 
 		var spacer =  Titanium.UI.createButton({
@@ -334,16 +375,14 @@ var createPicker = function(){
 		picker.add(pickerValues);
 		win.add(toolbar);
 		pickerView.add(picker);
+		win.add(pickerView);
+		picker.show();
+		pickerView.show();
 
         };
         var url = hhh.getProperty('app.host') + '/game/list_active';
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.open('GET', url);
         xhr.send();
-
-
-	
-
-	return pickerView;
 };
 

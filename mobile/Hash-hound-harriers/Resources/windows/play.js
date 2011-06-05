@@ -76,17 +76,21 @@ currentWindow.add(orLabel);
 // Join Game
 
 var gameNumber = Titanium.UI.createLabel({
-        hintText:'Game Number',
+        text:'   Choose Game',
         height:35,
         top:120,
         left:30,
         width:250,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
+	color: '#A09D9D',
+	borderRadius: 5,
+	borderColor: '#DDD',
+	borderWidth: 1,
+	backgroundColor: '#fff'
 });
 
 gameNumber.addEventListener('click', function(){
 	
-	createPicker();
+	createPicker(currentWindow, gameNumber);
 
 });
 
@@ -107,7 +111,8 @@ join.addEventListener('click', function(e)
                 return;
 	}
 
-	if(gameNumber.value.length == 0){
+	houndGameId = hhh.setProperty('hound.game.id');
+	if(houndGameId === null){
                 alert('Enter a Game Number!');
                 return;
 	}
@@ -128,7 +133,6 @@ join.addEventListener('click', function(e)
                 }
                 Ti.API.log(r);
 
-		// TODO - add real API values
                 hhh.setProperty('game.id', r.id);
                 hhh.setProperty('game.details', r);
 
@@ -140,7 +144,7 @@ join.addEventListener('click', function(e)
 		window.open({fullscreen:true});
 
         };
-        var url = hhh.getProperty('app.host') + '/game/' + gameNumber.value;
+        var url = hhh.getProperty('app.host') + '/game/' + houndGameId;
         xhr.open('GET', url);
         xhr.send();
 

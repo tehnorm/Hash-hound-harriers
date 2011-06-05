@@ -32,8 +32,11 @@ currentWindow.add(map_view);
 // Game Number 
 //////////////////////////////////
 
+var game = hhh.getProperty('game.details');
+var gameName = game.name;
+
 var gameNumber = Titanium.UI.createLabel({
-	text: hhh.getProperty('game.id'),
+	text: gameName,
 	color:'#fff',
 	backgroundColor:'black',
 	style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
@@ -74,7 +77,6 @@ var w = Titanium.UI.createWindow({
 
 closeButton.addEventListener('click', function()
 {
-	Ti.API.info('IN HERE');
 	currentWindow.close();
 });
 
@@ -112,7 +114,10 @@ Ti.API.info('game not started');
 		};
 		xhr.open('POST', url);
 		game_id = hhh.getProperty('game.id');
-		data = '{"game_id" : "' +  game_id + '"}';
+		var geo = hhh.getProperty('gps');
+		var latitude = geo.latitude;
+		var longitude = geo.longitude;
+		data = '{"game_id" : "' +  game_id + '", "loc": {"latitude": "' + latitude + '", "longitude": "' + longitude + '"}}';
 		Ti.API.log(data);
 		Ti.API.log(url);
 
@@ -133,7 +138,6 @@ Ti.API.info('game not started');
 				alert('Could place initial point.');
 				return ;
 			}
-			Ti.API.log(r);
 		};
 		xhr.open('POST', url);
 		// Grab the current cords
@@ -222,7 +226,6 @@ var flexSpace = Titanium.UI.createButton({
 
 closeButton.addEventListener('click', function()
 {
-	Ti.API.info('IN HERE');
 	currentWindow.close();
 });
 

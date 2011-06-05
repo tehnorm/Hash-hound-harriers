@@ -44,6 +44,7 @@ var hhh = function(){
 		},
 		'game.id' : 123123,
 		'game.started' : false,
+		'hare.game.id' : null,
 		'game.details' : null
 	};
 
