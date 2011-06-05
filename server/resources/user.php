@@ -13,7 +13,7 @@ class UserResource extends Resource {
 
 		if (preg_match("/\/user$/", $request->uri, $matches)) {
 			$response = $this->create_user($request);
-		} elseif (preg_match("/\/user\/check_location/", $request->uri, $matches)) {
+		} elseif (preg_match("/\/user\/check_location$/", $request->uri, $matches)) {
 			$response = $this->check_location($request);
 		} else {
 			$response->code = Response::BADREQUEST;
