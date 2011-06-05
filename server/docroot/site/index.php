@@ -50,7 +50,7 @@ Hashing is a derivation of Hares and Hounds, also known as a Paper Chase.   Begi
 The American classic style of a hash is called the Okinawa style, named after the American military base in Japan where the game was introduced to Americans.</p><p>
 
 Organizations continue to exist that play this classic game.  Trails are set that are run, biked, hiked, sometimes including trips on public transportation.</p>
-
+  <h1><a href='resources/StartupWeekend.apk'>Download Here (Android Only)</a></h1>
 </div>
 </body>
 </html>
