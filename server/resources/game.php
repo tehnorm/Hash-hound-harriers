@@ -228,7 +228,7 @@ class GameResource extends Resource {
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
-      $response->body = json_encode($games);
+      $response->body = json_encode((array)$games);
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
