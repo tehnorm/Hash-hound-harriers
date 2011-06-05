@@ -8,7 +8,7 @@
 #define STRING(x) _QUOTEME(x)
 
 NSString * const TI_APPLICATION_DEPLOYTYPE = @"development";
-NSString * const TI_APPLICATION_ID = @"com.innermesh.hhh";
+NSString * const TI_APPLICATION_ID = @"com.tsw2011.hhh";
 NSString * const TI_APPLICATION_PUBLISHER = @"norm";
 NSString * const TI_APPLICATION_URL = @"twitter.com/#tsw2011";
 NSString * const TI_APPLICATION_NAME = @"Hash-hound-harriers";
@@ -19,7 +19,7 @@ NSString * const TI_APPLICATION_GUID = @"d4e22fe0-db54-4862-9484-cac750865f09";
 BOOL const TI_APPLICATION_ANALYTICS = true;
 
 #ifdef TARGET_IPHONE_SIMULATOR
-NSString * const TI_APPLICATION_RESOURCE_DIR = @"/Users/norm/Projects/hhh/mobile/Hash-hound-harriers/Resources";
+NSString * const TI_APPLICATION_RESOURCE_DIR = @"/Developer/Workspaces/h3/mobile/Hash-hound-harriers/Resources";
 #endif
 
 int main(int argc, char *argv[]) {

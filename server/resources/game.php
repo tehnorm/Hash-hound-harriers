@@ -528,7 +528,9 @@ class GameResource extends Resource {
         try {
           $params = json_decode($data);
 
-          if (!isset($params->{"game_id"})) throw new Exception("Missing game_id");     
+          if (!isset($params->{"game_id"})) throw new Exception("Missing game_id");
+          if (!isset($params->{"loc"}->{"latitude"}) || !is_numeric($params->{"loc"}->{"latitude"})) throw new Exception("Missing loc{latitude} or it isn't numeric");
+          if (!isset($params->{"loc"}->{"longitude"}) || !is_numeric($params->{"loc"}->{"longitude"})) throw new Exception("Missing loc{longitude} or it isn't numeric");  
           
           $mongo = new Mongo(DB_SERVER);
           $db = $mongo->hhh;
@@ -542,10 +544,31 @@ class GameResource extends Resource {
           $game_collection->update(array("_id" => $mongo_game_id), 
                                    array('$set' => array("started" => new MongoDate($game["started"]))));
 
+          $points = $db->points;
+
+					$latitude = floatval($params->{"loc"}->{"latitude"});
+					$longitude = floatval($params->{"loc"}->{"longitude"});
+
+					$point_data = array(
+						"game-id" => $mongo_game_id,
+						"type" => "startpoint",
+						"user-action" => "Start Point",
+						"loc" => array(
+							"latitude" => $latitude,
+							"longitude" => $longitude
+						),
+						"found-by" => array()
+					);
+
+					if ($point_data["type"] === "arrow") {
+						$point_data["direction"] = $params->{"direction"};
+					}
+
+					$points->insert($point_data);
+
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
 					$response->body = json_encode($game);
-
 				} catch (Exception $e) {
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
