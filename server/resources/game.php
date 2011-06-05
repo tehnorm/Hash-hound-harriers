@@ -184,7 +184,7 @@ class GameResource extends Resource {
 	 * Adds a user to the game
 	 *
 	 * POST /game/user
-	 *   input: game_id, user_id
+	 *   input: game-id, user-id
 	 *  output: HTTP OK (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
@@ -199,11 +199,59 @@ class GameResource extends Resource {
 		$bad_request_response->body = "Expected game_id, user_id";
 
 		try {
-			if ($request->data) {
+			$data = file_get_contents("php://input");
+			if ($data) {
+				$params = json_decode($data);
 				try {
-					$params = json_decode($request->data);
+					if (!isset($params->{"game-id"})) throw new Exception("Missing game-id");
+					if (!isset($params->{"user-id"})) throw new Exception("Missing user-id");
+
+					try {
+						$mongo = new Mongo(DB_SERVER);
+						$db = $mongo->hhh;
+						$games = $db->games;
+						$users = $db->users;
+
+						$gameID = new MongoId($params->{"game-id"});
+						$userID = new MongoId($params->{"user-id"});
+
+						$game = $games->findOne(array("_id" => $gameID));
+						$user = $users->findOne(array("_id" => $userID));
+
+						if (isset($game) && isset($user)) {
+							if ($user["type"] === "hare") {
+								$games->update(
+									array("_id" => $gameID),
+									array("hare" => $userID)
+								);
+							} else {
+								$games->update(
+									array("_id" => $gameID),
+									array('$push' => array("hounds" => $userID))
+								);
+							}
+
+							$response->code = Response::OK;
+							$response->addHeader("Content-Type", "text/plain");
+							$response->body = "Added the User to the Game";
+						} elseif (!isset($game)) {
+							$response->code = Response::NOTFOUND;
+							$response->addHeader("Content-Type", "text/plain");
+							$response->body = "Could not find the Game";
+						} else {
+							$response->code = Response::NOTFOUND;
+							$response->addHeader("Content-Type", "text/plain");
+							$response->body = "Could not find the User";
+						}
+					} catch (Exception $e) {
+						$response->code = Response::INTERNALSERVERERROR;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = INTERNAL_SERVER_ERROR;
+					}
+
 				} catch (Exception $e) {
 					$response = $bad_request_response;
+					$response->body = $e->getMessage();
 				}
 			} else {
 				$response = $bad_request_response;
