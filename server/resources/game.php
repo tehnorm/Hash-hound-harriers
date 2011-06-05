@@ -488,6 +488,71 @@ class GameResource extends Resource {
 
 		return $response;
 	}
+
+
+	/**
+	 * End a game
+	 *
+	 * POST /game/end
+	 *   input: game_id
+	 *  output: HTTP OK (if successful),
+	 *					HTTP BADREQUEST (if incorrect params),
+	 *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
+	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
+	 */
+	function game_start($request) {
+		$response = new Response($request);
+
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected game_id, user_id";
+
+		try {
+			$response->code = Response::OK;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = "Ending a Game";
+
+      $data = file_get_contents("php://input");
+      if ($data) {
+        try {
+          $params = json_decode($data);
+
+          if (!isset($params->{"game_id"})) throw new Exception("Missing game_id");     
+          
+          $mongo = new Mongo(DB_SERVER);
+          $db = $mongo->hhh;
+          $game_collection = $db->games;
+          
+          $mongo_game_id = new MongoId($params->{"game_id"});
+          $game = $game_collection->findOne(array("_id" => $mongo_game_id));
+
+          $game["started"] = "ENDED";
+
+          $game_collection->update(array("_id" => $mongo_game_id), 
+                                   array("started" => new MongoDate($game["started"])));
+
+					$response->code = Response::OK;
+					$response->addHeader("Content-Type", "application/json");
+					$response->body = json_encode($game);
+
+				} catch (Exception $e) {
+					$response = $bad_request_response;
+					$response->body = $e->getMessage();
+				}
+			} else {
+				$response = $bad_request_response;
+			}
+		} catch (Exception $e) {
+			$response->code = Response::INTERNALSERVERERROR;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = INTERNAL_SERVER_ERROR;
+		}
+
+		return $response;
+	}
+
+
 }
 
 
