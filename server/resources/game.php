@@ -55,6 +55,8 @@ class GameResource extends Resource {
 			$response = $this->add_user($request);
 		} elseif (preg_match("/\/game\/start$/", $request->uri, $matches)) {
 			$response = $this->game_start($request);
+		} elseif (preg_match("/\/game\/end$/", $request->uri, $matches)) {
+			$response = $this->game_end($request);
 		} else {
 			$response->code = Response::BADREQUEST;
 			$response->addHeader("Content-Type", "text/plain");
@@ -500,7 +502,7 @@ class GameResource extends Resource {
 	 *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
 	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
 	 */
-	function game_start($request) {
+	function game_end($request) {
 		$response = new Response($request);
 
 		$bad_request_response = new Response($request);
