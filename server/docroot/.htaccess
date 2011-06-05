@@ -1,7 +1,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    RewriteRule ^$ site/index.php
+    RewriteRule ^$ http://beta.innermesh.com/site/index.php [R=302,L]
 
     RewriteCond %{REQUEST_URI} !dispatch\.php$
     RewriteCond %{REQUEST_FILENAME} !-f
