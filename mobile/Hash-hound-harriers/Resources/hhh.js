@@ -316,15 +316,18 @@ var createPicker = function(win, gameChooserLabel){
 			style:Titanium.UI.iPhone.SystemButtonStyle.DONE
 		});
 		done.addEventListener('click',function(e) {
-			// TODO : do something with the found ID
-		//	data[index].text = picker.getSelectedRow(0).title;
-			id = values[picker.getSelectedRow()];
-			title = picker.getSelectedRow();
+			id = values[currentIndex];
+			title = picker.getSelectedRow(0).title;
 			gameChooserLabel.text = '   ' + title;
+			hhh.setProperty('hare.game.id', id);
 			pickerView.hide();
 			win.remove(pickerView);
-			iCanHazPicker = false;
 			win.remove(toolbar);
+		});
+
+		var currentIndex = 0;
+		picker.addEventListener('change', function(e){
+			currentIndex = e.rowIndex;
 		});
 
 		var spacer =  Titanium.UI.createButton({
