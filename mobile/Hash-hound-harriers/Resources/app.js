@@ -173,7 +173,7 @@ tabGroup.addTab(accountTab);
 
 // open tab group
 tabGroup.open();
-tabGroup.setActiveTab(0);
+tabGroup.setActiveTab(2);
 Ti.App.fireEvent('hide_indicator');
 
 
