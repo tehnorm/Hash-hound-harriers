@@ -108,7 +108,7 @@ save.addEventListener('click', function(e)
 */
         // send the data
 	var data = { 
-		'device-id' : Ti.App.id,
+		'device-id' : Titanium.Platform.createUUID(),
 		'current-loc' : hhh.getProperty('gps'),
 		name : fname + ' ' + lname,
 		email : '' 

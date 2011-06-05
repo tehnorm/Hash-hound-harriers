@@ -35,7 +35,7 @@ var hhh = function(){
 		'heading' : 90 ,
 		'user' : {
 			/*
-			 * user._id : { '$id' : 1231232d33s2343  }
+			 * user.id : 1231232d33s2343
 			 * user.name
 			 * user.device-id
 			 * user.email
@@ -227,10 +227,12 @@ if (Titanium.Geolocation.locationServicesEnabled==false) {
 	});
 
 	// Updates when the heading changes
+/*
 	Titanium.Geolocation.addEventListener('heading ',function(e) {
 		Ti.API.info('Heading event: ');
 		return handle_heading_update(e);
 	});
+*/
 }
 
 

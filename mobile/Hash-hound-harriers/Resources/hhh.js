@@ -33,7 +33,7 @@ var pad = function(number, length) {
 
 var validUser = function(){
         u = hhh.getProperty('user');
-        if(u._id !== undefined){
+        if(u.id !== undefined){
                 return true;
         }
 	return false;
@@ -88,8 +88,8 @@ var createPoint = function(type){
 		focusable : false,
 		size: {width: 310, height: 170},
 		top: 0, 
-		left: 0,
-		annotations:[compassPin]
+		left: 0
+//		annotations:[compassPin]
 	});
 
 	mapView.addEventListener('touchstart', function(){
@@ -98,27 +98,71 @@ var createPoint = function(type){
 
 	var arrow = Titanium.UI.createImageView({
 		image: Titanium.Filesystem.resourcesDirectory + '/arrow.png',
-		height:20,
-		width:20,
-		left:170,
-		top:85
+		height:32,
+		width:32,
+		left:139,
+		top:75
 	});
 
 
         // Updates when the heading changes
-        Titanium.Geolocation.addEventListener('heading ',function(e) {
-                Ti.API.info('Heading event: ');
+	var rotateArrow = function(heading) {
 
 		var t3 = Ti.UI.create2DMatrix();
-		t3 = t3.rotate(e.trueHeading);
+		t3 = t3.rotate(heading);
 
 		var a = Titanium.UI.createAnimation();
 		a.transform = t3;
 		a.duration = 1;
-		a.autoreverse = true;
+		a.autoreverse = false;
 		a.repeat = 0;
+		a.delay = 0;
 		arrow.animate(a);
+	        hhh.setProperty('heading', heading);
 
+	};
+
+
+        Titanium.Geolocation.showCalibration = false;
+        Titanium.Geolocation.headingFilter = 90;
+ 
+        Ti.Geolocation.getCurrentHeading(function(e)
+        {
+            if (e.error)
+            {
+                currentHeading.text = 'error: ' + e.error;
+                return;
+            }
+            var x = e.heading.x;
+            var y = e.heading.y;
+            var z = e.heading.z;
+            var magneticHeading = e.heading.magneticHeading;
+            var accuracy = e.heading.accuracy;
+            var trueHeading = e.heading.trueHeading;
+            var timestamp = e.heading.timestamp;
+ 
+            Titanium.API.info('geo - current heading: ' + trueHeading);
+		rotateArrow(trueHeading);
+        });
+ 
+        Titanium.Geolocation.addEventListener('heading',function(e)
+        {
+            if (e.error)
+            {
+                Titanium.API.info("error: " + e.error);
+                return;
+            }
+ 
+            var x = e.heading.x;
+            var y = e.heading.y;
+            var z = e.heading.z;
+            var magneticHeading = e.heading.magneticHeading;
+            var accuracy = e.heading.accuracy;
+            var trueHeading = e.heading.trueHeading;
+            var timestamp = e.heading.timestamp;
+ 
+            Titanium.API.info('geo - heading updated: ' + trueHeading);
+		rotateArrow(trueHeading);
         });
 
 
@@ -131,7 +175,7 @@ var createPoint = function(type){
 		height:35,
 		top:200,
 		left:22,
-		width:250,
+		width:260,
 		hintText : 'Checkpoint Hint',
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
 	});
@@ -140,11 +184,27 @@ var createPoint = function(type){
 		height:35,
 		top:240,
 		left:22,
-		width:250,
+		width:260,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
 	});
 
-	
+
+	detailsSave.addEventListener('click', function(e){
+		// send the data
+		var geo = hhh.getProperty('gps');
+		var data = {
+			'type' : Titanium.Platform.createUUID(),
+			'lat' : geo.latitude,
+			'lng' : geo.longitude,
+			'direction' : hhh.getProperty('heading'),
+			'user-action' : detailsInput.valued,
+		};
+		xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.open('POST', url);
+		xhr.send(JSON.stringify(data));
+
+		that.close();
+	});	
 
 
 
