@@ -533,7 +533,7 @@ class GameResource extends Resource {
           $game["started"] = time();
 
           $game_collection->update(array("_id" => $mongo_game_id), 
-                                   array('$set' => array("started" => new MongoDate($game["started"])));
+                                   array('$set' => array("started" => new MongoDate($game["started"]))));
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
