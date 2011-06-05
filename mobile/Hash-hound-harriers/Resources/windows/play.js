@@ -76,17 +76,21 @@ currentWindow.add(orLabel);
 // Join Game
 
 var gameNumber = Titanium.UI.createLabel({
-        hintText:'Game Number',
+        text:'   Choose Game',
         height:35,
         top:120,
         left:30,
         width:250,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
+	color: '#A09D9D',
+	borderRadius: 5,
+	borderColor: '#DDD',
+	borderWidth: 1,
+	backgroundColor: '#fff'
 });
 
 gameNumber.addEventListener('click', function(){
 	
-	createPicker();
+	createPicker(currentWindow, gameNumber);
 
 });
 

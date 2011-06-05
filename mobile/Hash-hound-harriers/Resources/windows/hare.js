@@ -77,7 +77,6 @@ var w = Titanium.UI.createWindow({
 
 closeButton.addEventListener('click', function()
 {
-	Ti.API.info('IN HERE');
 	currentWindow.close();
 });
 
@@ -136,7 +135,6 @@ Ti.API.info('game not started');
 				alert('Could place initial point.');
 				return ;
 			}
-			Ti.API.log(r);
 		};
 		xhr.open('POST', url);
 		// Grab the current cords
@@ -225,7 +223,6 @@ var flexSpace = Titanium.UI.createButton({
 
 closeButton.addEventListener('click', function()
 {
-	Ti.API.info('IN HERE');
 	currentWindow.close();
 });
 
