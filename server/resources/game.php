@@ -20,6 +20,15 @@ class GameResource extends Resource {
 				$response->addHeader("Content-Type", "text/plain");
 				$response->body = "Expected an id";
 			}
+		} elseif (preg_match("/\/game(\/(?P<id>.*))\/found_points$/", $request->uri, $matches)) {
+			if (is_string($matches["id"])) {
+				$id = $matches["id"];
+				$response = $this->get_found_points($request, $id);
+			} else {
+				$response->code = Response::BADREQUEST;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = "Expected an id";
+			}
 		} elseif (preg_match("/\/game\/list_active$/", $request->uri, $matches)) {
       $response = $this->get_active_games($request);
     } elseif (preg_match("/\/game(\/(?P<id>.*))?/", $request->uri, $matches)) {
@@ -239,6 +248,50 @@ class GameResource extends Resource {
 
       foreach($points as $key => $point) {
       	$points[$key]["id"] = (string)$point["_id"];
+      }
+
+      $response->code = Response::OK;
+      $response->addHeader("Content-Type", "application/json");
+      $response->body = json_encode($points);
+		} catch (Exception $e) {
+			$response->code = Response::INTERNALSERVERERROR;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = INTERNAL_SERVER_ERROR;
+		}
+    
+		return $response;
+	}
+
+	/**
+	 * Gets Found Points for a Game
+	 *
+	 * GET /game/{id}/found_points
+	 *  output: HTTP OK + game (if successful),
+	 *					HTTP NOTFOUND (if not game exists for that id),
+	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
+	 */
+	function get_found_points($request, $id) {
+		$response = new Response($request);
+		
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected id";
+
+    try{
+      $mongo = new Mongo(DB_SERVER);
+      $db = $mongo->hhh;
+      $mongo_game_id = new MongoId($id);
+
+      $points_collection = $db->points;
+      $points = iterator_to_array($points_collection->find(array("game-id" => $mongo_game_id)));
+      
+      foreach($points as $key => $point) {
+        if (!isset($point["found-by"]) || ($point["found-by"]==array())){
+          unset($points[$key]);
+        }else{
+          $points[$key]["id"] = (string)$point["_id"];
+        }
       }
 
       $response->code = Response::OK;
