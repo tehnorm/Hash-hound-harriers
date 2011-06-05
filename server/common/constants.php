@@ -10,6 +10,6 @@ define("BAD_API_PATH", "No API method matches your request");
 define("INTERNAL_SERVER_ERROR", "There was an unforeseen error");
 
 // Game Constants
-define("GEO_MAX_DISTANCE", 50);	// in meters
+define("GEO_MAX_DISTANCE", 30);	// in meters
 define("GEO_EARTH_RADIUS", 6378000); // in meters
 ?>
