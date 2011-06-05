@@ -312,7 +312,7 @@ var createPicker = function(win, gameChooserLabel){
       	var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
 		var pickerView = Titanium.UI.createView({height:248,bottom:-95});
-		var picker = Titanium.UI.createPicker({top:0});
+		var picker = Titanium.UI.createPicker({top:0, useSpinner:true});
 		picker.selectionIndicator=true;
 
                 Ti.API.log('log',this);
