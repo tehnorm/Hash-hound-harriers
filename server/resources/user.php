@@ -154,6 +154,7 @@ class UserResource extends Resource {
 									"maxDistance"					=> $max_distance
 								)
 							);
+							error_log("Result ". var_export($geo_result, true));
 
 							if (count($geo_result["results"]) > 0) {
 								$point = $geo_result["results"][0]["obj"];

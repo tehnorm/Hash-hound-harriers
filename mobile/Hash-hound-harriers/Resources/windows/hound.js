@@ -89,6 +89,7 @@ var houndPolling = function(){
         var xhr = Titanium.Network.createHTTPClient();
         xhr.setRequestHeader('Content-Type', 'application/json');
         var url = hhh.getProperty('app.host') + '/user/check_location';
+
         xhr.onload = function(){
                 Ti.API.log(this);
                 Ti.API.log(this.responseText);
@@ -103,6 +104,7 @@ var houndPolling = function(){
                 try {
                         r = JSON.parse(this.responseText);
                 } catch (err) {
+		//	alert(err);
                         return ;
                 }
 
