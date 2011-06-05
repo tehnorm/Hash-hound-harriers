@@ -94,23 +94,57 @@ Ti.API.info('game not started');
 	        var xhr = Titanium.Network.createHTTPClient();
 		xhr.setRequestHeader('Content-Type', 'application/json');
 	        var url = hhh.getProperty('app.host') + '/game/start';
+		xhr.onload = function(){
+			Ti.API.log(this);
+			Ti.API.log(this.responseText);
+			Ti.API.log(this.responseData);
+			Ti.API.log(this.status);
+
+			try{
+				r = JSON.parse(this.responseText);
+			} catch (err) {
+				alert('Could not start game.');
+				return ;
+			}
+			Ti.API.log(r);
+
+
+		};
 		xhr.open('POST', url);
-		xhr.send('{"game-id" : ' + hhh.getProperty('game.id') + '}');
+		game_id = hhh.getProperty('game.id');
+		data = '{"game_id" : "' +  game_id + '"}';
+		Ti.API.log(data);
+		Ti.API.log(url);
+
+		xhr.send(data);
 
 
 		// Add the start point	
-	        var xhr = Titanium.Network.createHTTPClient();
+	        xhr = Titanium.Network.createHTTPClient();
 		xhr.setRequestHeader('Content-Type', 'application/json');
-	        var url = hhh.getProperty('app.host') + '/game/start';
+	        url = hhh.getProperty('app.host') + '/game/point';
+		xhr.onload = function(){
+			Ti.API.log(this);
+			Ti.API.log(this.responseText);
+			Ti.API.log(this.responseData);
+			Ti.API.log(this.status);
+
+			if(this.status != 200){
+				alert('Could place initial point.');
+				return ;
+			}
+			Ti.API.log(r);
+		};
 		xhr.open('POST', url);
 		// Grab the current cords
 		geo = hhh.getProperty('gps');
-		var data = {
+		data = {
 			'type' : 'startpoint',
-			'lat' : geo.latitude,
-			'lng' : geo.longitude
+			'loc' : {'latitude' :  geo.latitude, 'longitude' : geo.longitude},
+			'game-id' : game_id,
+			'user-action' : 'Start Point!'
 		};
-		xhr.send(data);
+		xhr.send(JSON.stringify(data));
 		
 		// Set game as started
 		hhh.setProperty('game.started', true);
