@@ -176,18 +176,8 @@ class GameResource extends Resource {
       $db = $mongo->hhh;
       $mongo_game_id = new MongoId($id);
 
-      $game_collection = $db->games;
-      $games = $game_collection->find(array());
-      var_dump($games);
-
-      $game = $game_collection->findOne(array("_id" => $mongo_game_id));
-      var_dump($game);
-
       $points_collection = $db->points;
-      //      $points = $points_collection->find(array());
-      $points = $points_collection->find(array("game-id" => $mongo_game_id));
-      var_dump($mongo_game_id);
-      var_dump($points);
+      $points = iterator_to_array($points_collection->find(array("game-id" => $mongo_game_id)));
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
@@ -197,7 +187,7 @@ class GameResource extends Resource {
 			$response->addHeader("Content-Type", "text/plain");
 			$response->body = INTERNAL_SERVER_ERROR;
 		}
-
+    
 		return $response;
 	}
 
