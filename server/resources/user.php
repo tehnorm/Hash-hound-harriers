@@ -140,7 +140,8 @@ class UserResource extends Resource {
 								array(
 									"geoNear" 						=> "points",
 									"query" 							=> array(
-										"game-id" => $gameID
+										"game-id" => $gameID,
+										"found-by" => array('$nin' => array($userID))
 									),
 									"near"								=> array(
 										$latitude,
@@ -169,13 +170,17 @@ class UserResource extends Resource {
 										'$push' => array("found-by" => $userID)
 									)
 								);
+
+								$point["id"] = (string) $point["_id"];
+
+								$response->code = Response::OK;
+								$response->addHeader("Content-Type", "application/json");
+								$response->body = json_encode($point);
+							} else {
+								$response->code = Response::OK;
+								$response->addHeader("Content-Type", "text/plain");
+								$response->body = "There are no nearby undiscovered points";
 							}
-
-							$point["id"] = (string) $point["_id"];
-
-							$response->code = Response::OK;
-							$response->addHeader("Content-Type", "application/json");
-							$response->body = json_encode($point);
 						} else {
 							$response->code = Response::NOTFOUND;
 							$response->addHeader("Content-Type", "text/plain");
