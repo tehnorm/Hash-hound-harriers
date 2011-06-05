@@ -102,13 +102,25 @@ class GameResource extends Resource {
         try {
           $params = json_decode($data);
 					
-          if (!isset($params->{"name"})) throw new Exception("Missing name"); 
           if (!isset($params->{"hare-id"})) throw new Exception("Missing hare-id");
+
+          if (!isset($params->{"name"}) || $params->{"name"} === "") {
+          	$adjectives = array("Spiffy","Drunk","Lost","Running","Tipsy","Inebriated","Colossal","Puny","Gigantic","Bitter","Adorable","Hopped-up","Fierce","Awesome","Brave","Victorious");
+          	$nouns = array("Hares","Hounds","Hunters","Lemurs","Rabbits","Puppies","Bunnies","Dogs","Chasers","Animals","Creatures","Mammals","Wolves");
+
+          	$adjective = $adjectives[array_rand($adjectives)];
+          	$noun = $nouns[array_rand($nouns)];
+          	$number = rand(0, 9999);
+
+          	$name = "$adjective $noun $number";
+          } else {
+          	$name = $params->{"name"};
+          }
           
           $hareID = new MongoId($params->{"hare-id"});
               
           $game_data = array(
-	          "name"			=> $params->{"name"},
+	          "name"			=> $name,
 	          "hare"			=> $hareID,
 	          "co-hares"	=> array(),
 	          "created"		=> new MongoDate(time()),
