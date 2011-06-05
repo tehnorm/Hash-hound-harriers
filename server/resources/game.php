@@ -11,7 +11,16 @@ class GameResource extends Resource {
 	function get($request) {
 		$response = new Response($request);
 
-		if (preg_match("/\/game(\/(?P<id>.*))?/", $request->uri, $matches)) {
+		if (preg_match("/\/game(\/(?P<id>.*))\/points$/", $request->uri, $matches)) {
+			if (is_string($matches["id"])) {
+				$id = $matches["id"];
+				$response = $this->get_game_points($request, $id);
+			} else {
+				$response->code = Response::BADREQUEST;
+				$response->addHeader("Content-Type", "text/plain");
+				$response->body = "Expected an id";
+			}
+    } elseif (preg_match("/\/game(\/(?P<id>.*))?/", $request->uri, $matches)) {
 			if (is_string($matches["id"])) {
 				$id = $matches["id"];
 				$response = $this->get_game($request, $id);
@@ -57,6 +66,7 @@ class GameResource extends Resource {
 	 * Creates a Game
 	 *
 	 * POST /game
+	 *   input: name
 	 *  output: HTTP OK + game (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
@@ -67,7 +77,7 @@ class GameResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "";
+		$bad_request_response->body = "Expected name";
     
 		try {
 			$response->code = Response::OK;
@@ -80,18 +90,25 @@ class GameResource extends Resource {
           $params = json_decode($data);
 					
           if (!isset($params->{"name"})) throw new Exception("Missing name");     
-          $game_data = array("name" => $params->{"name"});
+          $game_data = array(
+	          "name"			=> $params->{"name"},
+	          "hare"			=> null,
+	          "co-hares"	=> array(),
+	          "created"		=> new MongoDate(time()),
+	          "started"		=> null,
+	          "hounds"		=> array()
+	         );
           
           $mongo = new Mongo(DB_SERVER);
           $db = $mongo->hhh;
           $game_collection = $db->games;
           $game_collection->insert($game_data, true);
-          $game_data = $game_data["_id"];
+
+          $game_data["id"] = (string) $game_data["_id"];
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
-					$response->body = json_encode($game_data->_id);
-
+					$response->body = json_encode($game_data);
 				} catch (Exception $e) {
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
@@ -127,9 +144,13 @@ class GameResource extends Resource {
     try{
       $mongo = new Mongo(DB_SERVER);
       $db = $mongo->hhh;
+      
       $game_collection = $db->games;
+
       $mongo_game_id = new MongoId($id);
       $game = $game_collection->findOne(array("_id" => $mongo_game_id));
+
+      $game["id"] = (string) $game["_id"];
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
@@ -143,11 +164,52 @@ class GameResource extends Resource {
 		return $response;
 	}
 
+
+	/**
+	 * Gets Points for a Game
+	 *
+	 * GET /game/{id}/points
+	 *  output: HTTP OK + game (if successful),
+	 *					HTTP NOTFOUND (if not game exists for that id),
+	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
+	 */
+	function get_game_points($request, $id) {
+		$response = new Response($request);
+		
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected id";
+
+    try{
+      $mongo = new Mongo(DB_SERVER);
+      $db = $mongo->hhh;
+      $mongo_game_id = new MongoId($id);
+
+      $points_collection = $db->points;
+      $points = iterator_to_array($points_collection->find(array("game-id" => $mongo_game_id)));
+
+      foreach($points as $key => $point) {
+      	$points[$key]["id"] = (string)$point["_id"];
+      }
+
+      $response->code = Response::OK;
+      $response->addHeader("Content-Type", "application/json");
+      $response->body = json_encode($points);
+		} catch (Exception $e) {
+			$response->code = Response::INTERNALSERVERERROR;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = INTERNAL_SERVER_ERROR;
+		}
+    
+		return $response;
+	}
+
 	/**
 	 * Adds a point to the game
 	 *
 	 * POST /game/point
-	 *   input: game_id, type, latitude, longitude, direction
+	 *   input: game-id, type, loc {latitude, longitude}, direction
 	 *  output: HTTP OK (if successful),
 	 *					HTTP BADREQUEST (if incorrect params),
 	 *					HTTP NOTFOUND (if no game exists for that id),
@@ -159,14 +221,62 @@ class GameResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "Expected game_id, type, latitude, longitude, direction";
+		$bad_request_response->body = "Expected game-id, type, user-action, loc {latitude, longitude}, direction";
 
 		try {
-			if ($request->data) {
+			$data = file_get_contents("php://input");
+			if ($data) {
+				$params = json_decode($data);
+
 				try {
 					$params = json_decode($request->data);
+
+					if (!isset($params->{"game-id"})) throw new Exception("Missing game-id");
+					if (!isset($params->{"type"})) throw new Exception("Missing type");
+					if (!isset($params->{"user-action"})) throw new Exception("Missing user-action");
+					if (!isset($params->{"loc"}->{"latitude"}) || !is_numeric($params->{"loc"}->{"latitude"})) throw new Exception("Missing loc{latitude} or it isn't numeric");
+					if (!isset($params->{"loc"}->{"longitude"}) || !is_numeric($params->{"loc"}->{"longitude"})) throw new Exception("Missing loc{longitude} or it isn't numeric");
+					
+					if ($params->{"type"} === "arrow" && (!isset($params->{"direction"}) || !is_numeric($params->{"direction"}))) throw new Exception("Missing direction or it isn't numeric (it is not an optional field when type is arrow)");
+
+					try {
+						$mongo = new Mongo(DB_SERVER);
+						$db = $mongo->hhh;
+						$points = $db->points;
+
+						$gameID = new MongoId($params->{"game-id"});
+
+						$latitude = floatval($params->{"loc"}->{"latitude"});
+						$longitude = floatval($params->{"loc"}->{"longitude"});
+
+						$point_data = array(
+							"game-id" => $gameID,
+							"type" => $params->{"type"},
+							"user-action" => $params->{"user-action"},
+							"loc" => array(
+								"latitude" => $latitude,
+								"longitude" => $longitude
+							),
+							"found-by" => array()
+						);
+
+						if ($point_data["type"] === "arrow") {
+							$point_data["direction"] = $params->{"direction"};
+						}
+
+						$points->insert($point_data);
+
+						$response->code = Response::OK;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = "The Point was added to the Game";
+					} catch (Exception $e) {
+						$response->code = Response::INTERNALSERVERERROR;
+						$response->addHeader("Content-Type", "text/plain");
+						$response->body = INTERNAL_SERVER_ERROR;
+					}
 				} catch (Exception $e) {
 					$response = $bad_request_response;
+					$response->body = $e->getMessage();
 				}
 			} else {
 				$response = $bad_request_response;

@@ -29,7 +29,7 @@ class UserResource extends Resource {
 	 *
 	 * POST /user
 	 *   input: device-id, current-loc {latitude, longitude}, name, email
-	 *  output: HTTP OK + user_id (if successful),
+	 *  output: HTTP OK + user (if successful),
 	 *					HTTP BADREQUEST (if invalid params),
 	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
 	 */
@@ -67,11 +67,11 @@ class UserResource extends Resource {
 
 					$users->insert($user_data);
 
-					$user_id = $user_data["_id"];
+					$user_data["id"] = (string)$user_data["_id"];
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
-					$response->body = json_encode($user_id);
+					$response->body = json_encode($user_data);
 				} catch (Exception $e) {
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
@@ -168,6 +168,8 @@ class UserResource extends Resource {
 									)
 								);
 							}
+
+							$point["id"] = (string) $point["_id"];
 
 							$response->code = Response::OK;
 							$response->addHeader("Content-Type", "application/json");
