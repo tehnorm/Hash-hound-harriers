@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    RewriteRule ^$ site/index.php
+
     RewriteCond %{REQUEST_URI} !dispatch\.php$
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule .* dispatch.php [L,QSA]

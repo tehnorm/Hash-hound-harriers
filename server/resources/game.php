@@ -12,7 +12,6 @@ class GameResource extends Resource {
 		$response = new Response($request);
 
 		if (preg_match("/\/game(\/(?P<id>.*))\/points$/", $request->uri, $matches)) {
-      var_dump("list");
 			if (is_string($matches["id"])) {
 				$id = $matches["id"];
 				$response = $this->get_game_points($request, $id);
@@ -194,17 +193,12 @@ class GameResource extends Resource {
       $mongo_game_id = new MongoId($id);
       $games = iterator_to_array($game_collection->find(array()));
       foreach($games as $key => $game) {
-        //        if (!isset($game["started"])||($game["started"] == "ENDED")){
         if (!isset($game["started"])){
-          /* var_dump("dumping game"); */
-          /* var_dump($games[$key]); */
           unset($games[$key]);
         }else{
           $games[$key]["id"] = (string)$game["_id"];
         }
       }
-      var_dump($games);
-
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
