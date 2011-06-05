@@ -137,6 +137,7 @@ join.addEventListener('click', function(e)
                 Ti.API.log(r);
 
                 hhh.setProperty('game.id', r.id);
+                hhh.setProperty('hound.game.id', r.id);
                 hhh.setProperty('game.details', r);
 
 		var window = Titanium.UI.createWindow({

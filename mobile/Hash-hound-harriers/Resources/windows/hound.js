@@ -115,13 +115,13 @@ var houndPolling = function(){
 
         };
         xhr.open('POST', url);
-        game_id = hhh.getProperty('hare.game.id');
+        game_id = hhh.getProperty('hound.game.id');
         user = hhh.getProperty('user');
         var geo = hhh.getProperty('gps');
         var latitude = geo.latitude;
         var longitude = geo.longitude;
         data = {
-                'game_id' :  game_id,
+                'game-id' :  game_id,
                  "loc": {"latitude": latitude, "longitude": longitude },
                 'user-id' : user.id
         };
@@ -137,4 +137,4 @@ var houndPolling = function(){
 var timer = setInterval(function(e){
 	Ti.API.log('polling for points');
 	houndPolling();	
-}, 60000);
+}, 20000);
