@@ -535,23 +535,28 @@ class GameResource extends Resource {
           if (!isset($params->{"game_id"})) throw new Exception("Missing game_id");
           if (!isset($params->{"loc"}->{"latitude"}) || !is_numeric($params->{"loc"}->{"latitude"})) throw new Exception("Missing loc{latitude} or it isn't numeric");
           if (!isset($params->{"loc"}->{"longitude"}) || !is_numeric($params->{"loc"}->{"longitude"})) throw new Exception("Missing loc{longitude} or it isn't numeric");  
+
+					$latitude = floatval($params->{"loc"}->{"latitude"});
+					$longitude = floatval($params->{"loc"}->{"longitude"});
           
           $mongo = new Mongo(DB_SERVER);
           $db = $mongo->hhh;
           $game_collection = $db->games;
-          
+
           $mongo_game_id = new MongoId($params->{"game_id"});
           $game = $game_collection->findOne(array("_id" => $mongo_game_id));
 
           $game["started"] = time();
+          $game["loc"] = array(
+							"latitude" => $latitude,
+							"longitude" => $longitude
+                               );
 
           $game_collection->update(array("_id" => $mongo_game_id), 
-                                   array('$set' => array("started" => new MongoDate($game["started"]))));
+                                   array('$set' => array("started" => new MongoDate($game["started"]),
+                                                         "loc" => $game["loc"])));
 
           $points = $db->points;
-
-					$latitude = floatval($params->{"loc"}->{"latitude"});
-					$longitude = floatval($params->{"loc"}->{"longitude"});
 
 					$point_data = array(
 						"game-id" => $mongo_game_id,
