@@ -63,14 +63,15 @@ class UserResource extends Resource {
 
 					$mongo = new Mongo(DB_SERVER);
 					$db = $mongo->hhh;
-					$user_collection = $db->users;
-					$user_collection->insert($user_data);
+					$users = $db->users;
 
-					$user = $user_collection->findOne(array("device-id" => $params->{"device-id"}));
+					$users->insert($user_data);
+
+					$user_id = $user_data["_id"];
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
-					$response->body = json_encode($user);
+					$response->body = json_encode($user_id);
 				} catch (Exception $e) {
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
@@ -91,7 +92,7 @@ class UserResource extends Resource {
 	 * Allows the user to check their location against available points (also updates the user's location)
 	 *
 	 * POST /user/check_location
-	 *   input: game-id, user-id, latitude, longitude
+	 *   input: game-id, user-id, loc {latitude, longitude}
 	 *  output: HTTP OK + point (if successful),
 	 *					HTTP BADREQUEST (if invalid params),
 	 *					HTTP NOTFOUND (if no game exists for that id; if no user exists for that id),
@@ -103,44 +104,82 @@ class UserResource extends Resource {
 		$bad_request_response = new Response($request);
 		$bad_request_response->code = Response::BADREQUEST;
 		$bad_request_response->addHeader("Content-Type", "text/plain");
-		$bad_request_response->body = "Expected game-id, user-id, latitude, longitude";
+		$bad_request_response->body = "Expected game-id, user-id, loc {latitude, longitude}";
 
 		try {
-			if ($response->data) {
+			$data = file_get_contents("php://input");
+			if ($data) {
 				try {
-					$params = json_decode($request->data);
+					$params = json_decode($data);
 
 					if (!isset($params->{"game-id"})) throw new Exception("Missing game-id");
 					if (!isset($params->{"user-id"})) throw new Exception("Missing user-id");
-					if (!isset($params->{"latitude"}) || !is_numeric($params->{"latitude"})) throw new Exception("Missing latitude or it is not numeric");
-					if (!isset($params->{"longitude"}) || !is_numeric($params->{"longitude"})) throw new Exception("Missing longitude or it is not numeric");
+					if (!isset($params->{"loc"}->{"latitude"}) || !is_numeric($params->{"loc"}->{"latitude"})) throw new Exception("Missing latitude or it is not numeric");
+					if (!isset($params->{"loc"}->{"longitude"}) || !is_numeric($params->{"loc"}->{"longitude"})) throw new Exception("Missing longitude or it is not numeric");
 
 					try {
 						$mongo = new Mongo(DB_SERVER);
 						$db = $mongo->hhh;
-						$game_collection = $db->games;
+						$games = $db->games;
+						$points = $db->points;
 
-						$game = $game_collection->findOne($params->{"game-id"});
+						$gameID = new MongoId($params->{"game-id"});
+						$userID = new MongoId($params->{"user-id"});
+
+						$latitude = floatval($params->{"loc"}->{"latitude"});
+						$longitude = floatval($params->{"loc"}->{"longitude"});
+
+						$game = $games->findOne(array("_id" => $gameID));
 
 						if (isset($game)) {
-							$points = $db->command(
+							$max_distance = GEO_MAX_DISTANCE / GEO_EARTH_RADIUS;
+
+							$geo_result = $db->command(
 								array(
-									"geoNear" => "games.points.loc",
-									"near"		=> array(
-																"latitude" => $params->{"loc"}->{"latitude"},
-																"longitude" => $params->{"loc"}->{"longitude"}
-																),
-									"num"			=> 1
+									"geoNear" 						=> "points",
+									"query" 							=> array(
+										"game-id" => $gameID
+									),
+									"near"								=> array(
+										$latitude,
+										$longitude
+									),
+									"num"									=> 1,
+									"spherical"						=> true,
+									"maxDistance"					=> $max_distance
 								)
 							);
+
+							if (count($geo_result["results"]) > 0) {
+								$point = $geo_result["results"][0]["obj"];
+								$point["distance"] = $geo_result["results"][0]["dis"] * GEO_EARTH_RADIUS;
+								if ($point["distance"] > GEO_MAX_DISTANCE) $point = null;
+							} else {
+								$point = null;
+							}
+							
+							if ($point != null) {
+								$points->update(
+									array(
+										"_id" => $point["_id"]
+									),
+									array(
+										'$push' => array("found-by" => $userID)
+									)
+								);
+							}
+
+							$response->code = Response::OK;
+							$response->addHeader("Content-Type", "application/json");
+							$response->body = json_encode($point);
 						} else {
 							$response->code = Response::NOTFOUND;
-							$response->addHeader("Content-Type: text/plain");
-							$response->body = "No Game could be found";
+							$response->addHeader("Content-Type", "text/plain");
+							$response->body = "Could not find the Game";
 						}
 					} catch (Exception $e) {
 						$response->code = Response::INTERNALSERVERERROR;
-							$response->addHeader("Content-Type: text/plain");
+						$response->addHeader("Content-Type", "text/plain");
 						$response->body = INTERNAL_SERVER_ERROR;
 					}
 				} catch (Exception $e) {
