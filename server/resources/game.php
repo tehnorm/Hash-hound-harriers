@@ -136,7 +136,9 @@ class GameResource extends Resource {
     try{
       $mongo = new Mongo(DB_SERVER);
       $db = $mongo->hhh;
+      
       $game_collection = $db->games;
+
       $mongo_game_id = new MongoId($id);
       $game = $game_collection->findOne(array("_id" => $mongo_game_id));
 
@@ -152,6 +154,52 @@ class GameResource extends Resource {
 		return $response;
 	}
 
+
+	/**
+	 * Gets Points for a Game
+	 *
+	 * GET /game/{id}/points
+	 *  output: HTTP OK + game (if successful),
+	 *					HTTP NOTFOUND (if not game exists for that id),
+	 *					HTTP INTERNALSERVERERROR (if unforeseen error)
+	 */
+	function get_game_points($request, $id) {
+		$response = new Response($request);
+		
+		$bad_request_response = new Response($request);
+		$bad_request_response->code = Response::BADREQUEST;
+		$bad_request_response->addHeader("Content-Type", "text/plain");
+		$bad_request_response->body = "Expected id";
+
+    try{
+      $mongo = new Mongo(DB_SERVER);
+      $db = $mongo->hhh;
+      $mongo_game_id = new MongoId($id);
+
+      $game_collection = $db->games;
+      $games = $game_collection->find(array());
+      var_dump($games);
+
+      $game = $game_collection->findOne(array("_id" => $mongo_game_id));
+      var_dump($game);
+
+      $points_collection = $db->points;
+      //      $points = $points_collection->find(array());
+      $points = $points_collection->find(array("game-id" => $mongo_game_id));
+      var_dump($mongo_game_id);
+      var_dump($points);
+
+      $response->code = Response::OK;
+      $response->addHeader("Content-Type", "application/json");
+      $response->body = json_encode($points);
+		} catch (Exception $e) {
+			$response->code = Response::INTERNALSERVERERROR;
+			$response->addHeader("Content-Type", "text/plain");
+			$response->body = INTERNAL_SERVER_ERROR;
+		}
+
+		return $response;
+	}
 
 	/**
 	 * Adds a point to the game
