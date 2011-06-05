@@ -131,6 +131,8 @@ class UserResource extends Resource {
 						$latitude = floatval($params->{"loc"}->{"latitude"});
 						$longitude = floatval($params->{"loc"}->{"longitude"});
 
+						error_log("User ".$userID." has asked about (".$latitude.", ".$longitude.")");
+
 						$game = $games->findOne(array("_id" => $gameID));
 
 						if (isset($game)) {
@@ -173,32 +175,40 @@ class UserResource extends Resource {
 
 								$point["id"] = (string) $point["_id"];
 
+								error_log("There exists a point near the User's location");
+
 								$response->code = Response::OK;
 								$response->addHeader("Content-Type", "application/json");
 								$response->body = json_encode($point);
 							} else {
+								error_log("There does not exist a point near the User's location");
 								$response->code = Response::OK;
 								$response->addHeader("Content-Type", "text/plain");
 								$response->body = "There are no nearby undiscovered points";
 							}
 						} else {
+							error_log("Could not find the Game");
 							$response->code = Response::NOTFOUND;
 							$response->addHeader("Content-Type", "text/plain");
 							$response->body = "Could not find the Game";
 						}
 					} catch (Exception $e) {
+						error_log("Internal Server Error: " . $e->getMessage());
 						$response->code = Response::INTERNALSERVERERROR;
 						$response->addHeader("Content-Type", "text/plain");
 						$response->body = INTERNAL_SERVER_ERROR;
 					}
 				} catch (Exception $e) {
+					error_log("Bad Request Error:" . $e->getMessage());
 					$response = $bad_request_response;
 					$response->body = $e->getMessage();
 				}				
 			} else {
+				error_log("Bad Request Error");
 				$response = $bad_request_response;
 			}
 		} catch (Exception $e) {
+			error_log("Internal Server Error (outer): " . $e->getMessage());
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
 			$response->body = INTERNAL_SERVER_ERROR;
