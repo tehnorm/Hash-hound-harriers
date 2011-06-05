@@ -32,8 +32,11 @@ currentWindow.add(map_view);
 // Game Number 
 //////////////////////////////////
 
+var game = hhh.getProperty('game.details');
+var gameName = game.name;
+
 var gameNumber = Titanium.UI.createLabel({
-	text: hhh.getProperty('game.id'),
+	text: gameName,
 	color:'#fff',
 	backgroundColor:'black',
 	style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
