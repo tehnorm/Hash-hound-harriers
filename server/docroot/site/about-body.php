@@ -22,4 +22,4 @@
 </ul>
 <br /><br />
 <h1>Contact</h1>
-<p>Email Todd Mosier at toddmosier@yahoo.com for more info.</p>
+<p>Email Todd Mosier at toddmosier (at) yahoo.com for more info.</p>
