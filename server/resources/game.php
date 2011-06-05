@@ -267,8 +267,11 @@ class GameResource extends Resource {
       $points_collection = $db->points;
       $points = iterator_to_array($points_collection->find(array("game-id" => $mongo_game_id)));
 
+      $points_list = array();
+
       foreach($points as $key => $point) {
       	$points[$key]["id"] = (string)$point["_id"];
+      	$points_list[] = $points[$key];
       }
 
       $response->code = Response::OK;
