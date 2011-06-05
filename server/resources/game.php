@@ -218,17 +218,21 @@ class GameResource extends Resource {
 
       $mongo_game_id = new MongoId($id);
       $games = iterator_to_array($game_collection->find(array()));
+
+      $games_list = array();
+
       foreach($games as $key => $game) {
         if (!isset($game["started"])){
           unset($games[$key]);
         }else{
           $games[$key]["id"] = (string)$game["_id"];
+        	$games_list[] = $games[$key];
         }
       }
 
       $response->code = Response::OK;
       $response->addHeader("Content-Type", "application/json");
-      $response->body = json_encode((array)$games);
+      $response->body = json_encode($games_list);
 		} catch (Exception $e) {
 			$response->code = Response::INTERNALSERVERERROR;
 			$response->addHeader("Content-Type", "text/plain");
