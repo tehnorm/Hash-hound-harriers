@@ -222,7 +222,7 @@ class GameResource extends Resource {
       $games_list = array();
 
       foreach($games as $key => $game) {
-        if (!isset($game["started"])){
+        if (!isset($game["started"]) || ($game["started"] == "ENDED")){
           unset($games[$key]);
         }else{
           $games[$key]["id"] = (string)$game["_id"];
@@ -600,7 +600,7 @@ class GameResource extends Resource {
           $game["started"] = "ENDED";
 
           $game_collection->update(array("_id" => $mongo_game_id), 
-                                   array("started" => new MongoDate($game["started"])));
+                                   array('$set' => array("started" => new MongoDate($game["started"]))));
 
 					$response->code = Response::OK;
 					$response->addHeader("Content-Type", "application/json");
