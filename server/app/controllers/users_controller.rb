@@ -80,4 +80,12 @@ class UsersController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+###
+## Starting non-standard functions
+#
+  def get_json
+    @user = User.find(params[:id])
+    render :json => @user
+  end
 end

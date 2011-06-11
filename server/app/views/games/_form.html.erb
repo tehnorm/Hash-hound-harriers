@@ -1,5 +1,11 @@
 <%= form_for(@game) do |f| %>
-  Name: <%=f.text_field :name%>
+  Name: <%=f.text_field :name %><br />
+  Hare: <%= f.text_field :hare %><br />
+  Co-Hares: <%= f.text_field :co_hares %><br />
+  Hounds: <%= f.text_field :hounds %><br />
+  Created: <%= f.text_field :created %><br />
+  Started: <%= f.text_field :started %><br />
+  Location: <%= f.text_field :loc %><br />
 
   <% if @game.errors.any? %>
     <div id="error_explanation">

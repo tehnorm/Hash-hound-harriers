@@ -80,4 +80,13 @@ class GamesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+###
+## Starting non-standard functions
+#
+
+  def get_json
+    @game = Game.find(params[:id])
+    render :json => @game
+  end
 end

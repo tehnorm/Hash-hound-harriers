@@ -1,10 +1,35 @@
 Server::Application.routes.draw do
-  resources :user2s
 
-  resources :games
+  resources :games do
+    member do
+      get :get_json
+      get :list_points
+      get :found_points
+    end
+    collection do
+      get :list_active
+      post :add_point
+      post :add_user
+      post :start
+      post :end
+    end
+  end
+
+  resources :users do
+    member do
+      get :get_json
+      post :check_location
+      post :found_point
+    end
+    collection do
+      get :get_json
+      post :check_location
+      post :found_point
+    end
+  end
+
   resources :points
-  resources :users
-
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -80,4 +80,12 @@ class PointsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+###
+## Starting non-standard functions
+#
+  def get_json
+    @point = Point.find(params[:id])
+    render :json => @point
+  end
 end
