@@ -18,6 +18,7 @@ class PointsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @point }
+      format.json  { render :json => @points }
     end
   end
 
@@ -84,8 +85,5 @@ class PointsController < ApplicationController
 ###
 ## Starting non-standard functions
 #
-  def get_json
-    @point = Point.find(params[:id])
-    render :json => @point
-  end
+
 end

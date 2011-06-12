@@ -17,14 +17,21 @@ class Game
 # 	},
 # }
 
-  key :name, String
-	key :hare, String
+  key :name, String, :required => true
+	key :hare, String, :required => true
   key :co_hares, Array
-	key :created, Date
-	key :started, Date
+	key :created_at, Date
+	key :started_at, Date
   key :hounds, Array
   key :loc, Hash
 
   has_many :points
+  
+  # Use created_at and updated_at timestamps
+  timestamps!
+
+  # Define the Named Scopes
+  named_scope :active, lambda {|time| {:conditions => ["started_at != ?", nil] }}
+
 
 end

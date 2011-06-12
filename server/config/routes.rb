@@ -2,7 +2,6 @@ Server::Application.routes.draw do
 
   resources :games do
     member do
-      get :get_json
       get :list_points
       get :found_points
     end
@@ -17,12 +16,10 @@ Server::Application.routes.draw do
 
   resources :users do
     member do
-      get :get_json
       post :check_location
       post :found_point
     end
     collection do
-      get :get_json
       post :check_location
       post :found_point
     end
