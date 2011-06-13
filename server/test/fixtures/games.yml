@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: 
+  '_id': ObjectId('asdfafadsfas'),
+  'name': 'Downtown Durham Track',
+  'hare': '1233',
+  'co-hares' : [122, 222]
+  'created' : date(),
+  'started' : date()
+  'hounds' : [223, 2233, 445, 4556, 4456]
+  'loc' : {
+    latitude: 34.2232,
+    longitude: -123.22
+  }
+
