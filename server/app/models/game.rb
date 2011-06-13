@@ -20,8 +20,8 @@ class Game
   key :name, String, :required => true
 	key :hare, String, :required => true
   key :co_hares, Array
-	key :created_at, Date
-	key :started_at, Date
+	key :created_at, DateTime
+	key :started_at, DateTime
   key :hounds, Array
   key :loc, Hash
 
@@ -31,7 +31,7 @@ class Game
   timestamps!
 
   # Define the Named Scopes
-  named_scope :active, lambda {|time| {:conditions => ["started_at != ?", nil] }}
+  # named_scope :active, lambda {|time| {:conditions => ["started_at != ?", nil] }}
 
 
 end
