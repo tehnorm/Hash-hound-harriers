@@ -120,7 +120,7 @@ class GamesController < ApplicationController
     
     if @games.nil? 
       respond_to do |format|
-        format.all { render :status => :not_found, :text => "No active games found." 
+        format.all { render :status => :not_found, :text => "No active games found." }
       end
     else
       respond_to do |format|

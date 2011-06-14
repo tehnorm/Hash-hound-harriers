@@ -31,7 +31,7 @@ class Game
   timestamps!
 
   # Define the Named Scopes
-  named_scope :active, lambda {|time| {:conditions => ["started_at != ?", nil] }}
+  #named_scope :active, lambda {|time| {:conditions => ["started_at != ?", nil] }}
 
 
 end
