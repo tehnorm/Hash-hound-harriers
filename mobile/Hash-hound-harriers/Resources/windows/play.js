@@ -51,9 +51,10 @@ start.addEventListener('click', function(e)
 
         };
         var url = hhh.getProperty('app.host') + '/game';
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        
         user = hhh.getProperty('user');
         xhr.open('POST', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send('{ "name" : "", "hare-id" : "' + user.id  + '"}');
 
 

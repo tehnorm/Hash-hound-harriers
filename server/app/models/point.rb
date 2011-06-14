@@ -19,6 +19,6 @@ class Point
   key :type, String
   key :created, Date
   key :game_id, String
-  key :loc, Hash
+  key :location, Location
 
 end

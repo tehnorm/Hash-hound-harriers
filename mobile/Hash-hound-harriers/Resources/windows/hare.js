@@ -94,7 +94,7 @@ startButton.addEventListener('click', function()
 		label.title = 'Counting down!';
 		// Start the game  /POST /game/start/game_id
 	        var xhr = Titanium.Network.createHTTPClient();
-		xhr.setRequestHeader('Content-Type', 'application/json');
+		
 	        var url = hhh.getProperty('app.host') + '/game/start';
 		xhr.onload = function(){
 			Ti.API.log('log',this);
@@ -112,12 +112,12 @@ startButton.addEventListener('click', function()
 			// Add game details to the system
                 	hhh.setProperty('game.details', r);
 
-
 			Ti.API.log('log',r);
 
 
 		};
 		xhr.open('POST', url);
+		xhr.setRequestHeader('Content-Type', 'application/json');
 		game_id = hhh.getProperty('game.id');
 		var geo = hhh.getProperty('gps');
 		var latitude = geo.latitude;
@@ -130,7 +130,7 @@ startButton.addEventListener('click', function()
 
 
 		// Add the start point	
-	        xhr = Titanium.Network.createHTTPClient();
+	        
 		xhr.setRequestHeader('Content-Type', 'application/json');
 	        url = hhh.getProperty('app.host') + '/game/point';
 		xhr.onload = function(){
@@ -145,6 +145,7 @@ startButton.addEventListener('click', function()
 			}
 		};
 		xhr.open('POST', url);
+		xhr = Titanium.Network.createHTTPClient();
 		// Grab the current cords
 		geo = hhh.getProperty('gps');
 		data = {

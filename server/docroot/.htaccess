@@ -1,9 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    RewriteRule ^$ http://beta.innermesh.com/site/index.php [R=302,L]
-
-    RewriteCond %{REQUEST_URI} !dispatch\.php$
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule .* dispatch.php [L,QSA]
-</IfModule>

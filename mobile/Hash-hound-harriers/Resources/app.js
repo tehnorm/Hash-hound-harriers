@@ -51,17 +51,17 @@ var hhh = function(){
 	var data = {};
 
 	data.getProperty = function(name) {
-		Ti.API.log('log','getting Prop ' + name + ' value ' + properties[name]);	
+		Ti.API.log('log','getting Prop ' + name + ' value ' + properties[name]);
 		return properties[name];
 	};
 
 	data.setProperty = function(name, value) {
-		Ti.API.log('log','setting Prop ' + name + ' Value ' + value);	
+		Ti.API.log('log','setting Prop ' + name + ' Value ' + value);
 		properties[name] = value;
 	};
 
 	data.append = function(name, value) {
-		Ti.API.log('log','appending Prop ' + name + ' Value ' + value);	
+		Ti.API.log('log','appending Prop ' + name + ' Value ' + value);
 		properties[name].push(value);
 	};
 
@@ -90,10 +90,10 @@ Ti.include("hhh.js");
 Titanium.UI.setBackgroundColor('#000');
 
 ///////////////////////////////////////////
-// TABS 
+// PAGES 
 ///////////////////////////////////////////
 
-// Near 
+// Play 
 var playWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
 	url:'windows/play.js'
@@ -101,82 +101,56 @@ var playWindow = Titanium.UI.createWindow({
 
 playWindow.hhh = hhh;
 
-var playTab = Titanium.UI.createTab({  
-	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/map.png',
-	title:'Play',
-	window:playWindow
-});
-
-playTab.addEventListener('blur', function(e) {
-//	Ti.App.fireEvent('hide_indicator');
-});
-
-playTab.addEventListener('focus', function(e) {
-//	e.tab.window.fireEvent('start_near_search');
-//	Ti.App.fireEvent('show_indicator');
-});
-
 // Account Tab 
 var accountWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
 	url:'windows/account.js'
 });
-
 accountWindow.hhh = hhh;
-
-var accountTab = Titanium.UI.createTab({  
-	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/settings.png',
-	title:'Account',
-	window:accountWindow
+Titanium.App.addEventListener('show_account_window', function(e) {
+	Ti.API.info("Showing Account Window");
+	accountWindow.open();
+	accountWindow.show();
+});
+Titanium.App.addEventListener('close_account_window', function(e) {
+	Ti.API.info("Closing Account Window");
+	accountWindow.hide();
+	accountWindow.close();
 });
 
-accountTab.addEventListener('blur', function(e) {
-	Ti.API.info('account - blur');
-});
-
-accountTab.addEventListener('focus', function(e) {
-	Ti.API.info('account - focus');
-	e.tab.window.fireEvent('window_focus');
-});
-
-
-// Info Tab 
-var infoWindow = Titanium.UI.createWindow({  
+// Main Tab 
+var mainWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
-	url:'windows/info.js'
+	url:'windows/main.js'
+});
+mainWindow.hhh = hhh;
+Titanium.App.addEventListener('show_main_window', function(e) {
+	Ti.API.info("Showing Main Window");
+	mainWindow.open();
+	mainWindow.show();
+});
+Titanium.App.addEventListener('close_main_window', function(e) {
+	Ti.API.info("Closing Main Window");
+	mainWindow.hide();
+	mainWindow.close();
 });
 
-infoWindow.hhh = hhh;
-
-var infoTab = Titanium.UI.createTab({  
-	icon:Titanium.Filesystem.resourcesDirectory + '/img/buttons/tabs/settings.png',
-	title:'Info',
-	window:infoWindow
+// Options Tab 
+var optionsWindow = Titanium.UI.createWindow({  
+	backgroundColor:'#fff',
+	url:'windows/options.js'
 });
-
-infoTab.addEventListener('blur', function(e) {
-	Ti.API.info('info - blur');
+optionsWindow.hhh = hhh;
+Titanium.App.addEventListener('show_options_window', function(e) {
+	Ti.API.info("Showing Options Window");
+	optionsWindow.open();
+	optionsWindow.show();
 });
-
-infoTab.addEventListener('focus', function(e) {
-	Ti.API.info('info - focus');
-	e.tab.window.fireEvent('window_focus');
+Titanium.App.addEventListener('close_options_window', function(e) {
+	Ti.API.info("Closing Options Window");
+	optionsWindow.hide();
+	optionsWindow.close();
 });
-
-/**
- *   add tabs
- */
-var tabGroup = Titanium.UI.createTabGroup();
-
-tabGroup.addTab(playTab);  
-tabGroup.addTab(infoTab);  
-tabGroup.addTab(accountTab);  
-
-// open tab group
-tabGroup.open();
-tabGroup.setActiveTab(2);
-Ti.App.fireEvent('hide_indicator');
-
 
 ///////////////////////////////////////////
 //  GPS & HEADING - HANDLERS 
@@ -304,3 +278,17 @@ Titanium.App.addEventListener('hide_indicator', function(e) {
 });
 	
 Ti.App.fireEvent('hide_indicator');
+
+///////////////////////////////////////////
+//  INITIAL PAGE LOAD 
+///////////////////////////////////////////
+// TODO : remove when we really have this hooked up
+Ti.App.Properties.setString('username', null);
+
+username = Ti.App.Properties.getString('username');
+Ti.API.log('info', username);
+if(username === null){
+	accountWindow.open();	
+}else{
+	mainWindow.open();	
+}
