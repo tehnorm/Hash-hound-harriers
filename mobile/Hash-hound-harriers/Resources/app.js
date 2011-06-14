@@ -106,24 +106,51 @@ var accountWindow = Titanium.UI.createWindow({
 	backgroundColor:'#fff',
 	url:'windows/account.js'
 });
-
 accountWindow.hhh = hhh;
-
-// Info Tab 
-var infoWindow = Titanium.UI.createWindow({  
-	backgroundColor:'#fff',
-	url:'windows/info.js'
+Titanium.App.addEventListener('show_account_window', function(e) {
+	Ti.API.info("Showing Account Window");
+	accountWindow.open();
+	accountWindow.show();
+});
+Titanium.App.addEventListener('close_account_window', function(e) {
+	Ti.API.info("Closing Account Window");
+	accountWindow.hide();
+	accountWindow.close();
 });
 
-infoWindow.hhh = hhh;
-
 // Main Tab 
-var mainWindow= Titanium.UI.createWindow({  
+var mainWindow = Titanium.UI.createWindow({  
 	backgroundColor:'#fff',
 	url:'windows/main.js'
 });
+mainWindow.hhh = hhh;
+Titanium.App.addEventListener('show_main_window', function(e) {
+	Ti.API.info("Showing Main Window");
+	mainWindow.open();
+	mainWindow.show();
+});
+Titanium.App.addEventListener('close_main_window', function(e) {
+	Ti.API.info("Closing Main Window");
+	mainWindow.hide();
+	mainWindow.close();
+});
 
-accountWindow.hhh = hhh;
+// Options Tab 
+var optionsWindow = Titanium.UI.createWindow({  
+	backgroundColor:'#fff',
+	url:'windows/options.js'
+});
+optionsWindow.hhh = hhh;
+Titanium.App.addEventListener('show_options_window', function(e) {
+	Ti.API.info("Showing Main Window");
+	optionsWindow.open();
+	optionsWindow.show();
+});
+Titanium.App.addEventListener('close_options_window', function(e) {
+	Ti.API.info("Closing Main Window");
+	optionsWindow.hide();
+	optionsWindow.close();
+});
 
 ///////////////////////////////////////////
 //  GPS & HEADING - HANDLERS 

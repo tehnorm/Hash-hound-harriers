@@ -56,6 +56,16 @@ save.addEventListener('click', function(e) {
 	userNameField.blur();	
 
 	uname = userNameField.value ;
+
+	//
+	// TODO: really hookup to the API
+	//
+
+	Ti.App.Properties.setString('username', uname);
+	Ti.App.fireEvent('close_account_window');
+	Ti.App.fireEvent('show_main_window');
+
+/*
 	var xhr = Titanium.Network.createHTTPClient();
 	xhr.onload = function(){
 		Ti.API.log('log',this);
@@ -76,6 +86,7 @@ save.addEventListener('click', function(e) {
 
 	};
 	var url = hhh.getProperty('app.host') + '/user';
+*/
 /*
 { 
 	device-id : 123123,
@@ -87,6 +98,7 @@ save.addEventListener('click', function(e) {
 	email : 'asdasdf@adsf.com'
 }
 */
+/*
         // send the data
 	var data = { 
 		'device-id' : Titanium.Platform.createUUID(),
@@ -98,7 +110,7 @@ save.addEventListener('click', function(e) {
 	xhr.open('POST', url);
 	xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
-
+*/
 });
 
 currentWindow.add(save);

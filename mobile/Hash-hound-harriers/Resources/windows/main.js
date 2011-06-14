@@ -159,3 +159,20 @@ join.addEventListener('click', function(e)
 currentWindow.add(join);
 currentWindow.add(gameNumber);
 
+// Options
+var options = Titanium.UI.createButton({
+        title:'Options',
+        top:50,
+        left:30,
+        height:30,
+        width:250
+});
+
+options.addEventListener('click', function(e)
+{
+	Ti.API.info('options clicked');
+
+	currentWindow.close();
+	Ti.App.fireEvent('options_window_show');
+
+});
