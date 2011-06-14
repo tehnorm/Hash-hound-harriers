@@ -61,8 +61,7 @@ var save = Titanium.UI.createButton({
 });
 
 
-save.addEventListener('click', function(e)
-{
+save.addEventListener('click', function(e) {
 
 	if(validUser()){
 		alert('already a user - you can play!');
@@ -73,8 +72,6 @@ save.addEventListener('click', function(e)
 
 	fname = firstNameField.value ;
 	lname = lastNameField.value ;
-	var xhr = Titanium.Network.createHTTPClient();
-	xhr.onload = function(){
 	var xhr = Titanium.Network.createHTTPClient();
 	xhr.onload = function(){
 		Ti.API.log('log',this);
