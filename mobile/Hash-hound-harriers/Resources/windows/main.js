@@ -77,51 +77,8 @@ join.addEventListener('click', function(e)
 {
 	Ti.API.info('join clicked');
 
-	if(!validUser()){
-                alert('Use Account to create a user!');
-                return;
-	}
+	createPicker(currentWindow, 'show_hound_window');
 
-	houndGameId = hhh.getProperty('hound.game.id');
-        Ti.API.log('log','houndgameid');
-        Ti.API.log('log',houndGameId);
-	if(houndGameId === null){
-                alert('Enter a Game Number!');
-                return;
-	}
-
-	// Find the game - if a valid game load the window
-        var xhr = Titanium.Network.createHTTPClient();
-        xhr.onload = function(){
-                Ti.API.log('log',this);
-                Ti.API.log('log',this.responseText);
-                Ti.API.log('log',this.responseData);
-                Ti.API.log('log',this.status);
-
-                try{
-                        r = JSON.parse(this.responseText);
-                } catch (err) {
-                        alert('No Game found');
-                        return ;
-                }
-                Ti.API.log('log','Setting game details - hounds');
-                Ti.API.log('log',r);
-
-                hhh.setProperty('game.id', r.id);
-                hhh.setProperty('hound.game.id', r.id);
-                hhh.setProperty('game.details', r);
-
-		var window = Titanium.UI.createWindow({
-			backgroundColor:'green',
-			url: './hound.js'
-		});
-		window.hhh = hhh;
-		window.open({fullscreen:true});
-
-        };
-        var url = hhh.getProperty('app.host') + '/game/' + houndGameId;
-        xhr.open('GET', url);
-        xhr.send();
 
 	
 });

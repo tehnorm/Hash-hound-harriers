@@ -306,7 +306,7 @@ var createPoint = function(type, mainMapView){
 	return that;
 };
 
-var createPicker = function(win, gameChooserLabel){
+var createPicker = function(win, callback){
 
 
       	var xhr = Titanium.Network.createHTTPClient();
@@ -354,11 +354,12 @@ var createPicker = function(win, gameChooserLabel){
 		done.addEventListener('click',function(e) {
 			id = values[currentIndex].id;
 			title = picker.getSelectedRow(0).title;
-			gameChooserLabel.text = '   ' + title;
 			hhh.setProperty('hound.game.id', id);
 			pickerView.hide();
 			win.remove(pickerView);
 			win.remove(toolbar);
+			Ti.App.fireEvent(callback);
+			currentWindow.close();
 		});
 
 		var currentIndex = 0;
