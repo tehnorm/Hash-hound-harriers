@@ -78,8 +78,6 @@ join.addEventListener('click', function(e)
 	Ti.API.info('join clicked');
 
 	createPicker(currentWindow, 'show_hound_window');
-
-
 	
 });
 

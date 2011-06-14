@@ -152,6 +152,23 @@ Titanium.App.addEventListener('close_options_window', function(e) {
 	optionsWindow.close();
 });
 
+// Hound Tab 
+var houndWindow = Titanium.UI.createWindow({  
+	backgroundColor:'#fff',
+	url:'windows/hound.js'
+});
+houndWindow.hhh = hhh;
+Titanium.App.addEventListener('show_hound_window', function(e) {
+	Ti.API.info("Showing Options Window");
+	houndWindow.open();
+	houndWindow.show();
+});
+Titanium.App.addEventListener('close_hound_window', function(e) {
+	Ti.API.info("Closing Options Window");
+	houndWindow.hide();
+	houndWindow.close();
+});
+
 ///////////////////////////////////////////
 //  GPS & HEADING - HANDLERS 
 ///////////////////////////////////////////
