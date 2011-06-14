@@ -389,3 +389,20 @@ var createPicker = function(win, gameChooserLabel){
         xhr.send();
 };
 
+var EARTH_RADIUS = 6378137;	// meters
+
+/**
+ * Calculates the distance (in meters) between two geographic coordinates using a spherical approximation of the Earth
+ */
+var calculateGeoDistance = function(pointA, pointB) {
+	var degreesToRadians = function(degrees) {
+		return degrees * (Math.PI / 180);
+	};
+
+	var latA = degreesToRadians(pointA.latitude);
+	var latB = degreesToRadians(pointB.latitude);
+	var longA = degreesToRadians(pointA.longitude);
+	var longB = degreesToRadians(pointB.longitude);
+
+	var distance = EARTH_RADIUS * Math.acos((Math.sin(latA) * Math.sin(latB)) + (Math.cos(latA) * Math.cos(latB) * Math.cos(longB - longA)));
+};
