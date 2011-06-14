@@ -5,7 +5,7 @@ currentWindow.title = 'Hash Hound Harriers';
 // Start game
 var start = Titanium.UI.createButton({
         title:'Start New Game',
-        top:50,
+        top:100,
         left:30,
         height:30,
         width:250
@@ -64,25 +64,6 @@ currentWindow.add(start);
 
 
 // Join Game
-
-var gameNumber = Titanium.UI.createLabel({
-        text:'   Choose Game',
-        height:35,
-        top:120,
-        left:30,
-        width:250,
-	color: '#A09D9D',
-	borderRadius: 5,
-	borderColor: '#DDD',
-	borderWidth: 1,
-	backgroundColor: '#fff'
-});
-
-gameNumber.addEventListener('click', function(){
-	
-	createPicker(currentWindow, gameNumber);
-
-});
 
 var join = Titanium.UI.createButton({
         title:'Join Game',
@@ -146,7 +127,6 @@ join.addEventListener('click', function(e)
 });
 
 currentWindow.add(join);
-currentWindow.add(gameNumber);
 
 // Options
 var options = Titanium.UI.createButton({

@@ -62,6 +62,7 @@ save.addEventListener('click', function(e) {
 	//
 
 	Ti.App.Properties.setString('username', uname);
+	hhh.setProperty('user', {id : 12323, 'username' : uname});
 	Ti.App.fireEvent('close_account_window');
 	Ti.App.fireEvent('show_main_window');
 

@@ -282,6 +282,8 @@ Ti.App.fireEvent('hide_indicator');
 ///////////////////////////////////////////
 //  INITIAL PAGE LOAD 
 ///////////////////////////////////////////
+// TODO : remove when we really have this hooked up
+Ti.App.Properties.setString('username', null);
 
 username = Ti.App.Properties.getString('username');
 Ti.API.log('info', username);
