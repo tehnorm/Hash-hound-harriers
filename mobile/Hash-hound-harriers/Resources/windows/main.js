@@ -63,17 +63,6 @@ start.addEventListener('click', function(e)
 currentWindow.add(start);
 
 
-// OR label
-var orLabel = Titanium.UI.createLabel({
-        text:'OR',
-        top:85,
-	textAlign: 'center',
-        height:30,
-	color: '#fff',
-        width:250
-});
-currentWindow.add(orLabel);
-
 // Join Game
 
 var gameNumber = Titanium.UI.createLabel({
@@ -162,7 +151,7 @@ currentWindow.add(gameNumber);
 // Options
 var options = Titanium.UI.createButton({
         title:'Options',
-        top:50,
+        top:220,
         left:30,
         height:30,
         width:250
@@ -173,6 +162,8 @@ options.addEventListener('click', function(e)
 	Ti.API.info('options clicked');
 
 	currentWindow.close();
-	Ti.App.fireEvent('options_window_show');
+	Ti.App.fireEvent('show_options_window');
 
 });
+
+currentWindow.add(options);

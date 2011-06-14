@@ -142,12 +142,12 @@ var optionsWindow = Titanium.UI.createWindow({
 });
 optionsWindow.hhh = hhh;
 Titanium.App.addEventListener('show_options_window', function(e) {
-	Ti.API.info("Showing Main Window");
+	Ti.API.info("Showing Options Window");
 	optionsWindow.open();
 	optionsWindow.show();
 });
 Titanium.App.addEventListener('close_options_window', function(e) {
-	Ti.API.info("Closing Main Window");
+	Ti.API.info("Closing Options Window");
 	optionsWindow.hide();
 	optionsWindow.close();
 });
