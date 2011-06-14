@@ -4,8 +4,8 @@ Name: <%= @game.name%><br />
 Hare: <%= @game.hare%>><br />
 Co-Hares: <%= @game.co_hares.join(", ")%><br />
 Hounds: <%= @game.hounds.join(", ")%><br />
-Created: <%= @game.created %><br />
-Started: <%= @game.started %><br />
+Created: <%= @game.created_at %><br />
+Started: <%= @game.started_at %><br />
 Location: <%= @game.loc.to_s %><br />
 <br />
 <%= link_to 'Edit', edit_game_path(@game) %> |
