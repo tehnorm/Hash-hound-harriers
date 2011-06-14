@@ -23,7 +23,7 @@ class Game
 	key :created_at, Date
 	key :started_at, Date
   key :hounds, Array
-  key :loc, Hash
+  key :location, Location
 
   has_many :points
   

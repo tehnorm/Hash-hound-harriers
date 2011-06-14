@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 Name: <%= @game.name%><br />
-Hare: <%= @game.hare%>><br />
+Hare: <%= @game.hare%><br />
 Co-Hares: <%= @game.co_hares.join(", ")%><br />
 Hounds: <%= @game.hounds.join(", ")%><br />
 Created: <%= @game.created_at %><br />
@@ -10,4 +10,4 @@ Location: <%= @game.loc.to_s %><br />
 <br />
 <%= link_to 'Edit', edit_game_path(@game) %> |
 <%= link_to 'Back', games_path %> | 
-<%= link_to 'Show JSON', get_json_game_path(@game) %>
+<%#= link_to 'Show JSON', get_json_game_path(@game) %>
