@@ -15,7 +15,6 @@ class User
   key :device_id, String
   key :name, String
   key :email, String
-  key :current_loc, Hash
-
+  key :current_loc, Location
 
 end
