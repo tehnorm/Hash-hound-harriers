@@ -2,59 +2,45 @@ Ti.include('../hhh.js');
 
 currentWindow.title = 'Account Details';
 
-var firstName = Titanium.UI.createLabel({
+
+
+var greeting = Titanium.UI.createLabel({
         color:'#fff',
-        text:'First Name',
+        text:'Welcome to HHH',
         top:10,
-        left:30,
-        width:100,
+	textAlign: 'center',
+        font : {fontSize : 48},
+	width:'auto',
         height:'auto'
 });
+currentWindow.add(greeting);
 
-currentWindow.add(firstName);
-
-var firstNameField = Titanium.UI.createTextField({
-        hintText:'enter first name',
-        height:35,
-        top:35,
-        left:30,
-        width:250,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
-});
-
-currentWindow.add(firstNameField);
-
-//
-//  CREATE FIELD TWO
-//
-var lastName = Titanium.UI.createLabel({
+var userName = Titanium.UI.createLabel({
         color:'#fff',
-        text:'Last Name',
-        top:75,
+        text:'What is your username?',
+        top:185,
         left:30,
-        width:100,
+        width:200,
         height:'auto'
 });
+currentWindow.add(userName);
 
-currentWindow.add(lastName);
-
-var lastNameField = Titanium.UI.createTextField({
-        hintText:'enter last name',
+var userNameField = Titanium.UI.createTextField({
+        hintText:'enter username',
         height:35,
-        top:100,
+        top:210,
         left:30,
         width:250,
         borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
 });
-
-currentWindow.add(lastNameField);
+currentWindow.add(userNameField);
 
 //
 // CREATE BUTTON
 //
 var save = Titanium.UI.createButton({
-        title:'Save my Details',
-        top:170,
+        title:'Get Started',
+        top:260,
         left:30,
         height:30,
         width:250
@@ -67,11 +53,9 @@ save.addEventListener('click', function(e) {
 		alert('already a user - you can play!');
 		return;
 	}
-	firstNameField.blur();	
-	lastNameField.blur();	
+	userNameField.blur();	
 
-	fname = firstNameField.value ;
-	lname = lastNameField.value ;
+	uname = userNameField.value ;
 	var xhr = Titanium.Network.createHTTPClient();
 	xhr.onload = function(){
 		Ti.API.log('log',this);
@@ -107,7 +91,7 @@ save.addEventListener('click', function(e) {
 	var data = { 
 		'device-id' : Titanium.Platform.createUUID(),
 		'current-loc' : hhh.getProperty('gps'),
-		name : fname + ' ' + lname,
+		name : uname,
 		email : '' 
 	};
         
