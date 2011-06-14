@@ -10,4 +10,5 @@
 
 <%= link_to 'Edit', edit_point_path(@point) %> |
 <%= link_to 'Back', points_path %> |
-<%= link_to 'Show JSON', get_json_point_path(@point) %>
+<%= link_to 'Show JSON', point_path(@point, :format => "json") %>
+

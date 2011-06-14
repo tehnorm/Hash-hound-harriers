@@ -7,6 +7,7 @@ class PointsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @points }
+      format.json  { render :json => @points }
     end
   end
 
@@ -18,7 +19,7 @@ class PointsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @point }
-      format.json  { render :json => @points }
+      format.json  { render :json => @point }
     end
   end
 
@@ -30,6 +31,7 @@ class PointsController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @point }
+      format.json  { render :json => @point }
     end
   end
 
@@ -50,6 +52,7 @@ class PointsController < ApplicationController
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @point.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @point.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -66,6 +69,7 @@ class PointsController < ApplicationController
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @point.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @point.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -79,6 +83,7 @@ class PointsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(points_url) }
       format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 

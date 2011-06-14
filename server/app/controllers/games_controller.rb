@@ -64,8 +64,8 @@ class GamesController < ApplicationController
     respond_to do |format|
       if @game.save
         format.html { redirect_to(@game, :notice => 'Game was successfully created.') }
-        format.xml  { render :xml => @game, :status => :created, :location => @game }
-        format.json  { render :json => @game, :status => :created, :location => @game }
+        format.xml  { render :xml => @game, :status => :created_at, :location => @game }
+        format.json  { render :json => @game, :status => :created_at, :location => @game }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @game.errors, :status => :unprocessable_entity }
@@ -127,6 +127,72 @@ class GamesController < ApplicationController
         format.html { render :action => "index", :html => @games }
         format.xml  { render :action => "index", :xml => @games }
         format.json  { render :index, :json => @games }
+      end
+    end
+  end
+
+
+    # POST /games/start
+    # POST /games/start.xml
+    # POST /games/start.json
+    # input: game:{id:'game_id'}
+    # 
+    # GET /games/1/start
+    # GET /games/1/start.xml
+    # GET /games/1/start.json
+    # output: HTTP OK (if successful)
+    #  HTTP BADREQUEST (if incorrect params),
+    #  HTTP INTERNALSERVERERROR (if unforeseen error)
+  def start
+    @game = Game.find(params[:id])
+    
+    respond_to do |format|
+      if @game.nil? 
+        format.all { render :status => :not_found, :text => "No game found of id #{params[:id]}" }
+      else
+        @game.started_at = DateTime.now()
+        if @game.save
+          format.html { render :action => "show", :html => @game, :notice => 'Game was successfully started.' }
+          format.xml  { render :action => "show", :xml => @game }
+          format.json  { render :action => "show", :json => @game }
+        else
+          format { render :action => "show" }
+          format.xml  { render :xml => @game.errors, :status => :unprocessable_entity }
+          format.json  { render :json => @game.errors, :status => :unprocessable_entity }
+        end
+      end
+    end
+  end
+
+
+    # POST /games/end
+    # POST /games/end.xml
+    # POST /games/end.json
+    # input: game:{id:'game_id'}
+    # 
+    # GET /games/1/end
+    # GET /games/1/end.xml
+    # GET /games/1/end.json
+    # output: HTTP OK (if successful)
+    #  HTTP BADREQUEST (if incorrect params),
+    #  HTTP INTERNALSERVERERROR (if unforeseen error)
+  def end
+    @game = Game.find(params[:id])
+    
+    respond_to do |format|
+      if @game.nil? 
+        format.all { render :status => :not_found, :text => "No game found of id #{params[:id]}" }
+      else
+        @game.started_at = nil
+        if @game.save
+          format.html { render :action => "show", :html => @game, :notice => 'Game was successfully ended.' }
+          format.xml  { render :action => "show", :xml => @game }
+          format.json  { render :action => "show", :json => @game }
+        else
+          format { render :action => "show" }
+          format.xml  { render :xml => @game.errors, :status => :unprocessable_entity }
+          format.json  { render :json => @game.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end
