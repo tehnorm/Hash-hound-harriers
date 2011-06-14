@@ -9,7 +9,7 @@ class Location
   # Location Object incoming
   def self.to_mongo(loc)
     unless loc.nil?
-      {:latitude => loc.latitude, :longitude => loc.longitude}
+      {:latitude => loc[:latitude], :longitude => loc[:longitude]}
     end
   end
 
