@@ -5,7 +5,7 @@
   Type: <%= @point.type %><br />
   Created: <%= @point.created_at %><br />
   Game Id: <%= @point.game_id %><br />
-  Location: <%= @point.loc %><br />
+  Location: <%= @point.location.to_s %><br />
 
 
 <%= link_to 'Edit', edit_point_path(@point) %> |
