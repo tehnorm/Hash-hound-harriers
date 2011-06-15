@@ -21,4 +21,6 @@ class Point
   key :game_id, String
   key :location, Location
 
+  belongs_to :game
+
 end
