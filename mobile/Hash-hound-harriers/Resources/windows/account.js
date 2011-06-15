@@ -2,79 +2,71 @@ Ti.include('../hhh.js');
 
 currentWindow.title = 'Account Details';
 
-var firstName = Titanium.UI.createLabel({
+
+
+var greeting = Titanium.UI.createLabel({
         color:'#fff',
-        text:'First Name',
+        text:'Welcome to HHH',
         top:10,
-        left:30,
-        width:100,
+	textAlign: 'center',
+        font : {fontSize : 48},
+	width:'auto',
         height:'auto'
 });
+currentWindow.add(greeting);
 
-currentWindow.add(firstName);
-
-var firstNameField = Titanium.UI.createTextField({
-        hintText:'enter first name',
-        height:35,
-        top:35,
-        left:30,
-        width:250,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
-});
-
-currentWindow.add(firstNameField);
-
-//
-//  CREATE FIELD TWO
-//
-var lastName = Titanium.UI.createLabel({
+var userName = Titanium.UI.createLabel({
         color:'#fff',
-        text:'Last Name',
-        top:75,
+        text:'What is your username?',
+        top:185,
         left:30,
-        width:100,
+        width:200,
         height:'auto'
 });
+currentWindow.add(userName);
 
-currentWindow.add(lastName);
-
-var lastNameField = Titanium.UI.createTextField({
-        hintText:'enter last name',
+var userNameField = Titanium.UI.createTextField({
+        hintText:'enter username',
         height:35,
-        top:100,
+        top:210,
         left:30,
         width:250,
         borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
 });
-
-currentWindow.add(lastNameField);
+currentWindow.add(userNameField);
 
 //
 // CREATE BUTTON
 //
 var save = Titanium.UI.createButton({
-        title:'Save my Details',
-        top:170,
+        title:'Get Started',
+        top:260,
         left:30,
         height:30,
         width:250
 });
 
 
-save.addEventListener('click', function(e)
-{
+save.addEventListener('click', function(e) {
 
 	if(validUser()){
 		alert('already a user - you can play!');
 		return;
 	}
-	firstNameField.blur();	
-	lastNameField.blur();	
+	userNameField.blur();	
 
-	fname = firstNameField.value ;
-	lname = lastNameField.value ;
-	var xhr = Titanium.Network.createHTTPClient();
-	xhr.onload = function(){
+	uname = userNameField.value ;
+
+	//
+	// TODO: really hookup to the API
+	//
+
+	Ti.App.Properties.setString('username', uname);
+	hhh.setProperty('user', {id : 12323, 'username' : uname});
+	Ti.App.fireEvent('close_account_window');
+	Ti.App.fireEvent('show_main_window');
+
+/*
 	var xhr = Titanium.Network.createHTTPClient();
 	xhr.onload = function(){
 		Ti.API.log('log',this);
@@ -95,6 +87,7 @@ save.addEventListener('click', function(e)
 
 	};
 	var url = hhh.getProperty('app.host') + '/user';
+*/
 /*
 { 
 	device-id : 123123,
@@ -106,18 +99,19 @@ save.addEventListener('click', function(e)
 	email : 'asdasdf@adsf.com'
 }
 */
+/*
         // send the data
 	var data = { 
 		'device-id' : Titanium.Platform.createUUID(),
 		'current-loc' : hhh.getProperty('gps'),
-		name : fname + ' ' + lname,
+		name : uname,
 		email : '' 
 	};
         
 	xhr.open('POST', url);
 	xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(data));
-
+*/
 });
 
 currentWindow.add(save);

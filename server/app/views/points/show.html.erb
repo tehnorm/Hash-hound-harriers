@@ -3,11 +3,12 @@
   User Action: <%=@point.user_action %><br />
   Found By: <%= @point.found_by.to_s %><br />
   Type: <%= @point.type %><br />
-  Created: <%= @point.created %><br />
+  Created: <%= @point.created_at %><br />
   Game Id: <%= @point.game_id %><br />
   Location: <%= @point.loc %><br />
 
 
 <%= link_to 'Edit', edit_point_path(@point) %> |
 <%= link_to 'Back', points_path %> |
-<%= link_to 'Show JSON', get_json_point_path(@point) %>
+<%= link_to 'Show JSON', point_path(@point, :format => "json") %>
+

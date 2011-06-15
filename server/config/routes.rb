@@ -4,12 +4,14 @@ Server::Application.routes.draw do
     member do
       get :list_points
       get :found_points
+      get :start # should be same as POST collection[param{:id => 'id'}
+      get :end # should be same as POST collection[param{:id => 'id'}
     end
     collection do
       get :list_active
       post :add_point
       post :add_user
-      post :start
+      post :start, :action => "start"
       post :end
     end
   end

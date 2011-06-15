@@ -17,8 +17,8 @@ class Point
   key :user_action, String
   key :found_by, Array
   key :type, String
-  key :created, Date
+  key :created_at, Date
   key :game_id, String
-  key :loc, Hash
+  key :location, Location
 
 end

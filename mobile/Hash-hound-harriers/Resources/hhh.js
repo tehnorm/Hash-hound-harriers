@@ -306,12 +306,12 @@ var createPoint = function(type, mainMapView){
 	return that;
 };
 
-var createPicker = function(win, gameChooserLabel){
+var createPicker = function(win, callback){
 
 
       	var xhr = Titanium.Network.createHTTPClient();
         xhr.onload = function(){
-		var pickerView = Titanium.UI.createView({height:248,bottom:-95});
+		var pickerView = Titanium.UI.createView({height:248,bottom:0});
 		var picker = Titanium.UI.createPicker({top:0, useSpinner:true});
 		picker.selectionIndicator=true;
 
@@ -354,11 +354,12 @@ var createPicker = function(win, gameChooserLabel){
 		done.addEventListener('click',function(e) {
 			id = values[currentIndex].id;
 			title = picker.getSelectedRow(0).title;
-			gameChooserLabel.text = '   ' + title;
 			hhh.setProperty('hound.game.id', id);
 			pickerView.hide();
 			win.remove(pickerView);
 			win.remove(toolbar);
+			Ti.App.fireEvent(callback);
+			currentWindow.close();
 		});
 
 		var currentIndex = 0;
@@ -389,3 +390,20 @@ var createPicker = function(win, gameChooserLabel){
         xhr.send();
 };
 
+var EARTH_RADIUS = 6378137;	// meters
+
+/**
+ * Calculates the distance (in meters) between two geographic coordinates using a spherical approximation of the Earth
+ */
+var calculateGeoDistance = function(pointA, pointB) {
+	var degreesToRadians = function(degrees) {
+		return degrees * (Math.PI / 180);
+	};
+
+	var latA = degreesToRadians(pointA.latitude);
+	var latB = degreesToRadians(pointB.latitude);
+	var longA = degreesToRadians(pointA.longitude);
+	var longB = degreesToRadians(pointB.longitude);
+
+	var distance = EARTH_RADIUS * Math.acos((Math.sin(latA) * Math.sin(latB)) + (Math.cos(latA) * Math.cos(latB) * Math.cos(longB - longA)));
+};

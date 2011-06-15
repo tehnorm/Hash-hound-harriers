@@ -2,3 +2,4 @@
 *.sublime-project
 .metadata
 .project
+nohup.out
