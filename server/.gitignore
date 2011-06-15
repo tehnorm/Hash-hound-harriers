@@ -5,3 +5,5 @@ tmp/
 *~
 #*#
 nohup.out
+db/hhh_*
+db/mongod.lock
