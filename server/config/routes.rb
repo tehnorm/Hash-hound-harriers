@@ -1,6 +1,7 @@
 Server::Application.routes.draw do
 
   resources :games do
+    resources :points
     member do
       get :list_points
       get :found_points
