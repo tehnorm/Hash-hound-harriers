@@ -20,7 +20,7 @@ class Point
   key :created_at, Date
   key :game_id, String
   key :location, Location
-
-  belongs_to :game
+  
+  belongs_to :games
 
 end
