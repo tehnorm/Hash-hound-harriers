@@ -8,6 +8,7 @@ gem 'mongo_mapper'
 gem 'bson_ext'
 gem 'factory_girl_rails'
 gem 'geocoder'
+gem 'heroku'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
