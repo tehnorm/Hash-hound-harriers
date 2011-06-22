@@ -3,3 +3,5 @@
 .metadata
 .project
 nohup.out
+.ec2
+ec2.zip
