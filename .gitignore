@@ -1,2 +1,7 @@
 .DS_Store
 *.sublime-project
+.metadata
+.project
+nohup.out
+.ec2
+ec2.zip

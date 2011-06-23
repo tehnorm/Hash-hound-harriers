@@ -1,9 +1,9 @@
 Ti.include('../hhh.js');
 
 currentLoc = hhh.getProperty('gps');
-Ti.API.log(currentLoc);
+//Ti.API.log(currentLoc);
 gameDetails = hhh.getProperty('game.details');
-Ti.API.log(gameDetails);
+//Ti.API.log(gameDetails);
 
 /*
 var biz_pin = Titanium.Map.createAnnotation({
@@ -15,6 +15,55 @@ var biz_pin = Titanium.Map.createAnnotation({
         animate : true
 });
 */
+
+/* TODO : hook this up as showing the proper details about a game
+        if(!validUser()){
+                alert('Use Account to create a user!');
+                return;
+        }
+
+        houndGameId = hhh.getProperty('hound.game.id');
+        Ti.API.log('log','houndgameid');
+        Ti.API.log('log',houndGameId);
+        if(houndGameId === null){
+                alert('Enter a Game Number!');
+                return;
+        }
+
+        // Find the game - if a valid game load the window
+        var xhr = Titanium.Network.createHTTPClient();
+        xhr.onload = function(){
+                Ti.API.log('log',this);
+                Ti.API.log('log',this.responseText);
+                Ti.API.log('log',this.responseData);
+                Ti.API.log('log',this.status);
+
+                try{
+                        r = JSON.parse(this.responseText);
+                } catch (err) {
+                        alert('No Game found');
+                        return ;
+                }
+                Ti.API.log('log','Setting game details - hounds');
+                Ti.API.log('log',r);
+
+                hhh.setProperty('game.id', r.id);
+                hhh.setProperty('hound.game.id', r.id);
+                hhh.setProperty('game.details', r);
+
+                var window = Titanium.UI.createWindow({
+                        backgroundColor:'green',
+                        url: './hound.js'
+                });
+                window.hhh = hhh;
+                window.open({fullscreen:true});
+
+        };
+        var url = hhh.getProperty('app.host') + '/game/' + houndGameId;
+        xhr.open('GET', url);
+        xhr.send();
+*/
+
 
 var map_view = Titanium.Map.createView({        
 	mapType: Titanium.Map.STANDARD_TYPE,
@@ -87,14 +136,14 @@ currentWindow.add(toolbar);
 
 var houndPolling = function(){
         var xhr = Titanium.Network.createHTTPClient();
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        
         var url = hhh.getProperty('app.host') + '/user/check_location';
 
         xhr.onload = function(){
-                Ti.API.log(this);
-                Ti.API.log(this.responseText);
-                Ti.API.log(this.responseData);
-                Ti.API.log(this.status);
+                //Ti.API.log(this);
+                //Ti.API.log(this.responseText);
+                //Ti.API.log(this.responseData);
+                //Ti.API.log(this.status);
 
                 if(this.status != 200){
                         alert('Server com issue.');
@@ -112,11 +161,12 @@ var houndPolling = function(){
 		addPinToMap(map_view, r);
 		Titanium.Media.vibrate();
 		alert('Point Found: (' + r.type + ') ' + r['user-action']);
-                Ti.API.log(r);
+                //Ti.API.log(r);
 
 
         };
         xhr.open('POST', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
         game_id = hhh.getProperty('hound.game.id');
         user = hhh.getProperty('user');
         var geo = hhh.getProperty('gps');
@@ -128,8 +178,8 @@ var houndPolling = function(){
                 'user-id' : user.id
         };
 
-        Ti.API.log(data);
-        Ti.API.log(url);
+        //Ti.API.log(data);
+        //Ti.API.log(url);
 
         xhr.send(JSON.stringify(data));
 
@@ -137,6 +187,6 @@ var houndPolling = function(){
 
 
 var timer = setInterval(function(e){
-	Ti.API.log('polling for points');
+	//Ti.API.log('polling for points');
 	houndPolling();	
 }, 20000);
